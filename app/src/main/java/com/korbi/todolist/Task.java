@@ -1,4 +1,4 @@
-package com.example.korbi.todolist;
+package com.korbi.todolist;
 
 /**
  * Created by korbi on 12.03.17.
@@ -8,16 +8,16 @@ public class Task
 {
     int id;
     String taskname;
-    boolean isDone;
+    int isDone;
 
-    public Task(int id, String taskname, boolean isDone)
+    public Task(int id, String taskname, int isDone)
     {
         this.id = id;
         this.taskname = taskname;
         this.isDone = isDone;
     }
 
-    public boolean getState()
+    public int getState()
     {
         return isDone;
     }
@@ -32,7 +32,7 @@ public class Task
         this.taskname = taskname;
     }
 
-    public void setState(boolean state)
+    public void setState(int state)
     {
         this.isDone = state;
     }

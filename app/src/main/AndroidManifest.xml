@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.korbi.todolist">
+    package="com.korbi.todolist.todolist">
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_check_box_black_24dp"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_check_circle_black_24dp"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:screenOrientation="portrait">
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.korbi.todolist.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -20,7 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ADDtask" />
+        <activity
+            android:name="com.korbi.todolist.ADDtask"
+            android:label="@string/AddTaskActivityTitle"/>
+        <activity
+            android:name="com.korbi.todolist.AboutTheApp"
+            android:label="@string/AboutAppName"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">ToDoList</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_clear_completet_tasks">Clear</string>
+    <string name="confirm_message">All completed Tasks will be deleted!</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="about">about</string>
+    <string name="setPriority">Very important!</string>
+    <string name="AddTaskActivityTitle">Add new task</string>
+    <string name="AboutAppName">About app</string>
+    <string name="AppInfo">This simple to do list app is the first real android app, I have
+        developed. If you have problems with the app or you want features to be added don\'t
+        hesitate to contact me. The app is completely free and without ads and should only provide
+        basic functionality. Personally, I find that many to do list apps in the playstore are either
+        overloaded with ads, features like synchronisation to the cloud etc or in most cases both.
+        However if you like the app and find it usefull, please consider rating it on Google Play.
+        \n
+        \n
+        Have fun with the app \n
+        Korbinian</string>
+    <string name="conntact_me">Conntact me: korbinianmoser98@gmail.com</string>
+    <string name="rateAppButton">Rate this App</string>
+    <string name="DonateButton">Make a small Donation</string>
+</resources>
