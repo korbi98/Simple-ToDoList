@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ToDoList</string>
+    <string name="AboutAppName"></string>
+    <string name="AddTaskActivityTitle">Neue Aufgabe</string>
+    <string name="DateOrRemainingTime">Das Datum anstatt der verbleibenden Zeit anzeigen</string>
+    <string name="EmptyNameErrorMessage">Die Bezeichnung der Aufgabe kann nicht leer sein</string>
+    <string name="EventCheckBox">Im Kalendar speichern</string>
+    <string name="IncludeTimeInDeadline">Auch eine Zeit, statt nur ein Datum festlegen</string>
+    <string name="PriorityLabel">Priorität</string>
+    <string name="SetDeadlineLabel">Muss erledigt sein bis:</string>
+    <string name="StandardPriorityLabel">Standart Priorität</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="confirm_message">Alle beendeten Aufgaben werden gelöscht!</string>
+    <string name="contact_me">Email: korbinianmoser98@gmail.com</string>
+    <string name="empty_list">Erstelle neue Aufgaben, indem du auf den Button unten tippst</string>
+    <string name="high">Hoch</string>
+    <string name="low">Niedrig</string>
+    <string name="multipleTasksDeleted">%d Aufgaben gelöscht</string>
+    <string name="no">Nein</string>
+    <string name="normal">Normal</string>
+    <string name="oneTaskDeleted">eine Aufgabe gelöscht</string>
+    <string name="rateAppButton">Bewerte die App</string>
+    <string name="resetDateBtn">Zurücksetzen</string>
+    <string name="setDateBtn">Datum</string>
+    <string name="setDividersCheckbox">Trennlinien zwischen den Aufgaben zeigen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="today">Heute</string>
+    <string name="undoDelete">Rückgängig</string>
+    <string name="wrongtime">Die Zeit liegt in der Vergangenheit.\n Zeit wurde deshalb auf Stunde in der Zukunft gesetzt</string>
+    <string name="yes">Ja</string>
+    <string name="about">Über</string>
+    <string name="new_task_hint">Neue Aufgabe</string>
+    <string name="AppInfo">Eine einfache und leistungsstarke App um den Alltag zu meistern.
+        \nWenn dir die App gefällt, wäre es schön wenn du eine Bewertung abgeben und sie mit deinen Freunden teilen würdest.
+        \n \nSourcecode:\nhttps://github.com/korbi98/ToDoList</string>
+</resources>

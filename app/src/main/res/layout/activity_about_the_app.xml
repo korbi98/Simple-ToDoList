@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.korbi.todolist.ADDtask"
+    tools:context="com.korbi.todolist.ui.AddEditTask"
     android:fillViewport="true">
 
     <TableLayout
@@ -20,7 +20,7 @@
             android:paddingTop="20dp"
             android:paddingBottom="10dp"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_check_circle_black_24dp" />
+            app:srcCompat="@drawable/ic_icon_round" />
 
         <TextView
             android:id="@+id/textView2"
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
-            android:text="@string/conntact_me"
+            android:text="@string/contact_me"
             android:autoLink="email"/>
 
     </TableLayout>

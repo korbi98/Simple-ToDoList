@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.korbi.todolist.MainActivity">
+    tools:context="com.korbi.todolist.ui.MainActivity"
+    android:id="@+id/coordinatorlayout">
 
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
@@ -22,14 +23,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"/>
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginRight="30dp"
+        android:background="@color/colorPriorityLabelNormal"
+        app:srcCompat="@drawable/ic_add_white_24px" />
+
+    <include layout="@layout/content_main" />
 
 </android.support.design.widget.CoordinatorLayout>

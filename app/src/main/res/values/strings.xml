@@ -1,29 +1,52 @@
 <resources>
     <string name="app_name">ToDoList</string>
     <string name="action_settings">Settings</string>
-    <string name="action_clear_completet_tasks">Clear</string>
+    <string name="action_clear_completed_tasks">Clear</string>
     <string name="confirm_message">All completed Tasks will be deleted!</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
-
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="about">about</string>
-    <string name="setPriority">Very important!</string>
+    <string name="about">About</string>
     <string name="AddTaskActivityTitle">Add new task</string>
     <string name="AboutAppName">About app</string>
-    <string name="AppInfo">This simple to do list app is the first real android app, I have
-        developed. If you have problems with the app or you want features to be added don\'t
-        hesitate to contact me. The app is completely free and without ads and should only provide
-        basic functionality. Personally, I find that many to do list apps in the playstore are either
-        overloaded with ads, features like synchronisation to the cloud etc or in most cases both.
-        However if you like the app and find it usefull, please consider rating it on Google Play.
-        \n
-        \n
-        Have fun with the app \n
-        Korbinian</string>
-    <string name="conntact_me">Conntact me: korbinianmoser98@gmail.com</string>
+    <string name="AppInfo">A Simple, yet powerful app to manage your everyday life.
+        \nIf you like the app, please consider rating it on the Playstore and sharing
+        it with your friends. \n \nSourcecode:\nhttps://github.com/korbi98/ToDoList
+        </string>
+    <string name="contact_me">Contact me: korbinianmoser98@gmail.com</string>
     <string name="rateAppButton">Rate this App</string>
     <string name="DonateButton">Make a small Donation</string>
+    <string name="ConfirmTasks" translatable="false">OK</string>
+    <string name="setDateBtn">Set</string>
+    <string name="daysTillDeadline" translatable="false">d</string>
+    <string name="hoursTillDeadline" translatable="false">h</string>
+    <string name="settings">Settings</string>
+    <string name="IncludeTimeInDeadline">Also include a time and not only a date in the deadline</string>
+    <string name="EventCheckBox">Store in calendar</string>
+    <string name="EmptyNameErrorMessage">The name of the task cannot be empty</string>
+    <string name="PriorityLabel">Priority:</string>
+    <string name="low">Low</string>
+    <string name="normal">Normal</string>
+    <string name="high">High</string>
+    <string name="SetDeadlineLabel">Deadline:</string>
+    <string name="resetDateBtn">Reset</string>
+    <string name="StandardPriorityLabel">Default priority:</string>
+    <string name="wrongtime">Time is in the past.\nTime has been set to one hour from now</string>
+    <string name="oneTaskDeleted">Deleted one task!</string>
+    <string name="undoDelete">UNDO</string>
+    <string name="setDividersCheckbox">Use visible dividers in the tasklist</string>
+    <string name="add_widget">Add widget</string>
+    <string name="DateOrRemainingTime">Show the date of the deadline instead of the remaining time</string>
+    <string name="today">today</string>
+    <string name="empty_list">Create new tasks by tapping the button below \\nTo delete tasks swipe from right to left</string>
+    <string name="multipleTasksDeleted">Deleted %d tasks!</string>
+    <string name="new_task_hint">New task</string>
+
+    <string-array name="default_priority">
+
+        <item>Low</item>
+        <item>Normal</item>
+        <item>High</item>
+        <item>Use previous priority</item>
+
+    </string-array>
 </resources>

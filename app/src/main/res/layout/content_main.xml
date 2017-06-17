@@ -7,13 +7,25 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main"
-    tools:context="com.korbi.todolist.todolist.com.korbi.todolist.MainActivity"
-    android:longClickable="true">
+    tools:context="com.korbi.todolist.ui.MainActivity"
+    android:longClickable="true"
+    android:orientation="vertical">
 
 
-    <ListView
-        android:id="@+id/TaskList"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/TaskRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/emptylistMessage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:text="@string/empty_list"
+        android:visibility="gone"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"/>
+
 </LinearLayout>

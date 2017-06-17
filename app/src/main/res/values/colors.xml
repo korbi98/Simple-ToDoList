@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#424242</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#000000</color>
+
+    <color name="colorPriorityLowWholeBackground">#C8E6C9</color>
+    <color name="colorPriorityNormalWholeBackground">#FFF9C4</color>
+    <color name="colorPriorityHighWholeBackground">#FFCCBC</color>
+
+    <color name="colorCompletedTask">#BDBDBD</color>
+
+    <color name="colorPriorityLabelLow">#1B5E20</color>
+    <color name="colorPriorityLabelNormal">#F57F17</color>
+    <color name="colorPriorityLabelHigh">#B71C1C</color>
+    <color name="colorPriorityLabelDone">#616161</color>
+
+    <color name="colorPriorityLow">#2E7D32</color>
+    <color name="colorPriorityNormal">#F9A825</color>
+    <color name="colorPriorityHigh">#C62828</color>
+
+    <color name="widgetBackground">#DD424242</color>
+    <color name="widgetItemBackground">#E0E0E0</color>
 </resources>
