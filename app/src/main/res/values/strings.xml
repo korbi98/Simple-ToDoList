@@ -43,7 +43,7 @@
     <string name="deadline_before_priority">Tasks get sorted by deadline first and then by priority</string>
     <string name="tomorow">tomorow</string>
     <string name="sourcecode">Sourcecode:</string>
-    <string name="github_link" translatable="false">https://github.com/korbi98/ToDoList/tree/master</string>
+    <string name="github_link" translatable="false">www.github.com/korbi98/ToDoList/tree/master</string>
 
     <string-array name="default_priority">
 
