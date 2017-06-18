@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ToDoList</string>
-    <string name="AboutAppName"></string>
-    <string name="AddTaskActivityTitle">Neue Aufgabe</string>
-    <string name="DateOrRemainingTime">Das Datum anstatt der verbleibenden Zeit anzeigen</string>
-    <string name="EmptyNameErrorMessage">Die Bezeichnung der Aufgabe kann nicht leer sein</string>
-    <string name="EventCheckBox">Im Kalendar speichern</string>
-    <string name="IncludeTimeInDeadline">Auch eine Zeit, statt nur ein Datum festlegen</string>
-    <string name="PriorityLabel">Priorität</string>
-    <string name="SetDeadlineLabel">Muss erledigt sein bis:</string>
-    <string name="StandardPriorityLabel">Standart Priorität</string>
-    <string name="action_settings">Einstellungen</string>
+
+    <string name="add_task_activity_title">Neue Aufgabe</string>
+    <string name="date_or_remaining_time">Die verbleibende Zeit statt dem Datum anzeigen</string>
+    <string name="empty_name_error">Die Bezeichnung der Aufgabe kann nicht leer sein</string>
+    <string name="event_checkbox">Im Kalendar speichern</string>
+    <string name="include_time_in_deadline">Auch eine Zeit, statt nur ein Datum festlegen</string>
+    <string name="priority_label">Priorität</string>
+    <string name="set_deadline_label">Muss erledigt sein bis:</string>
+    <string name="default_priority_label">Standart Priorität</string>
+
     <string name="confirm_message">Alle beendeten Aufgaben werden gelöscht!</string>
-    <string name="contact_me">Email: korbinianmoser98@gmail.com</string>
-    <string name="empty_list">Erstelle neue Aufgaben, indem du auf den Button unten tippst</string>
+    <string name="contact_me">Email: info@korbinian-moser.de</string>
+    <string name="empty_list">Erstelle neue Aufgaben, indem du auf den Button unten tippst\nWische von Rechts nach Links um Aufgaben zu löschen</string>
     <string name="high">Hoch</string>
     <string name="low">Niedrig</string>
-    <string name="multipleTasksDeleted">%d Aufgaben gelöscht</string>
+    <string name="multiple_tasks_deleted">%d Aufgaben gelöscht</string>
     <string name="no">Nein</string>
     <string name="normal">Normal</string>
-    <string name="oneTaskDeleted">eine Aufgabe gelöscht</string>
-    <string name="rateAppButton">Bewerte die App</string>
-    <string name="resetDateBtn">Zurücksetzen</string>
-    <string name="setDateBtn">Datum</string>
-    <string name="setDividersCheckbox">Trennlinien zwischen den Aufgaben zeigen</string>
+    <string name="one_task_deleted">Eine Aufgabe gelöscht</string>
+    <string name="rate_app_button">Bewerte die App</string>
+    <string name="reset_deadline_btn">Zurücksetzen</string>
+    <string name="set_date_btn">Datum</string>
+    <string name="set_divider_checkbox">Trennlinien zwischen den Aufgaben zeigen</string>
     <string name="settings">Einstellungen</string>
     <string name="today">Heute</string>
-    <string name="undoDelete">Rückgängig</string>
-    <string name="wrongtime">Die Zeit liegt in der Vergangenheit.\n Zeit wurde deshalb auf Stunde in der Zukunft gesetzt</string>
+    <string name="undo_delete">Rückgängig</string>
+    <string name="wrong_time">Die Zeit liegt in der Vergangenheit.\n Zeit wurde deshalb auf Stunde in der Zukunft gesetzt</string>
     <string name="yes">Ja</string>
     <string name="about">Über</string>
     <string name="new_task_hint">Neue Aufgabe</string>
-    <string name="AppInfo">Eine einfache und leistungsstarke App um den Alltag zu meistern.
-        \nWenn dir die App gefällt, wäre es schön wenn du eine Bewertung abgeben und sie mit deinen Freunden teilen würdest.
-        \n \nSourcecode:\nhttps://github.com/korbi98/ToDoList</string>
+    <string name="app_info">Eine einfache und leistungsstarke App um den Alltag zu meistern.
+        \nWenn dir die App gefällt, wäre es schön wenn du eine Bewertung abgeben und sie mit deinen Freunden teilen würdest.</string>
+    <string name="undo_pressed">wird rückgängig gemacht</string>
+    <string name="deadline_before_priority">Aufgaben werden erst nach Datum und dann nach Wichtigkeit sortiert</string>
+    <string name="tomorow">Morgen</string>
+    <string name="sourcecode">Quellcode:</string>
 </resources>

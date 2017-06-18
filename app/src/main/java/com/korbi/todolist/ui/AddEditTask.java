@@ -41,6 +41,7 @@ public class AddEditTask extends AppCompatActivity
     private Button resetDeadlineButton;
 
     SimpleDateFormat dateFormat;
+    SimpleDateFormat dateTimeFormat;
 
     final Calendar c = Calendar.getInstance();
 
@@ -48,6 +49,7 @@ public class AddEditTask extends AppCompatActivity
     SharedPreferences.Editor editor;
 
     private int position;
+    private int isDateOrTimeSet = Task.NO_DEADLINE;
 
 
     private void createCustomActionBar(String activityTitle)
@@ -89,7 +91,7 @@ public class AddEditTask extends AppCompatActivity
         }
         else selectPriority.setProgress(settings.getInt(Settings.STANDARD_PRIORITY_SETTING, 1));
 
-        createCustomActionBar(getString(R.string.AddTaskActivityTitle));
+        createCustomActionBar(getString(R.string.add_task_activity_title));
 
         setCalendar(0, 0, 0, 0, 0);
 
@@ -107,11 +109,8 @@ public class AddEditTask extends AppCompatActivity
             }
         });
 
-        if (settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false))
-        {
-            dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        }
-        else dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        dateTimeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
         prefill();
 
@@ -143,28 +142,25 @@ public class AddEditTask extends AppCompatActivity
 
         if (newTaskEntry.getText().toString().trim().length() > 0)
         {
-            if (c.get(Calendar.YEAR) < 100) c.set(Calendar.YEAR, 3000);
-
-
 
             int id = MainActivity.db.getLatestID() + 1;
 
             Task newTask = new Task(id, newTaskEntry.getText().toString(),
-                    c.getTime(), selectPriority.getProgress(), 0);
+                    c.getTime(), selectPriority.getProgress(), 0, isDateOrTimeSet);
 
             MainActivity.db.addTask(newTask);
             MainActivity.taskItems.add(newTask);
             MainActivity.adapter.sort();
             MainActivity.adapter.notifyItemRangeChanged(0, MainActivity.taskItems.size());
 
-            if (c.get(Calendar.YEAR) < 3000) createCalendarEvent(newTask);
+            if (newTask.getTimeIsSet() != Task.NO_DEADLINE) createCalendarEvent(newTask);
 
             updateWidget();
             finish();
         }
         else
         {
-            Toast.makeText(getApplicationContext(), R.string.EmptyNameErrorMessage,
+            Toast.makeText(getApplicationContext(), R.string.empty_name_error,
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -178,6 +174,7 @@ public class AddEditTask extends AppCompatActivity
             MainActivity.taskItems.get(position).setTaskname(newTaskEntry.getText().toString());
             MainActivity.taskItems.get(position).setPriority(selectPriority.getProgress());
             MainActivity.taskItems.get(position).setDeadline(c.getTime());
+            MainActivity.taskItems.get(position).setTimeIsSet(isDateOrTimeSet);
 
             MainActivity.db.updateTask(MainActivity.taskItems.get(position));
             MainActivity.adapter.sort();
@@ -188,7 +185,7 @@ public class AddEditTask extends AppCompatActivity
         }
         else
         {
-            Toast.makeText(getApplicationContext(), R.string.EmptyNameErrorMessage,
+            Toast.makeText(getApplicationContext(), R.string.empty_name_error,
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -216,12 +213,13 @@ public class AddEditTask extends AppCompatActivity
                         c.set(Calendar.YEAR, year);
                         c.set(Calendar.MONTH, month);
                         c.set(Calendar.DATE, day);
+                        isDateOrTimeSet = Task.JUST_DATE;
                         updateDeadlineSection();
                     }
 
                 }, year, month, day);
 
-        datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
+        //datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
         datePickerDialog.show();
     }
 
@@ -243,14 +241,15 @@ public class AddEditTask extends AppCompatActivity
                         c.set(Calendar.HOUR_OF_DAY, hour);
                         c.set(Calendar.MINUTE, minute);
 
-                        if (c.getTimeInMillis() - System.currentTimeMillis() < 1000)
-                        {
-                            Toast.makeText(getApplicationContext(), getString(R.string.wrongtime),
-                                    Toast.LENGTH_LONG).show();
-
-                            c.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) + 1);
-                            c.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
-                        }
+//                        if (c.getTimeInMillis() - System.currentTimeMillis() < 1000)
+//                        {
+//                            Toast.makeText(getApplicationContext(), getString(R.string.wrong_time),
+//                                    Toast.LENGTH_LONG).show();
+//
+//                            c.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) + 1);
+//                            c.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
+//                        }
+                        isDateOrTimeSet = Task.DATE_AND_TIME;
                         updateDeadlineSection();
                     }
 
@@ -303,7 +302,13 @@ public class AddEditTask extends AppCompatActivity
 
     private void updateDeadlineSection()
     {
-        if (c.get(Calendar.YEAR) > 100 && c.get(Calendar.YEAR) < 2900)
+        if (isDateOrTimeSet == Task.DATE_AND_TIME && settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false))
+        {
+            createEventCheckBox.setEnabled(true);
+            resetDeadlineButton.setEnabled(true);
+            deadlineLabel.setText(dateTimeFormat.format(c.getTime()));
+        }
+        else if (isDateOrTimeSet != Task.NO_DEADLINE)
         {
             createEventCheckBox.setEnabled(true);
             resetDeadlineButton.setEnabled(true);
@@ -326,6 +331,7 @@ public class AddEditTask extends AppCompatActivity
             newTaskEntry.setText(MainActivity.taskItems.get(position).getTaskname());
             selectPriority.setProgress(MainActivity.taskItems.get(position).getPriority());
             c.setTime(MainActivity.taskItems.get(position).getDeadline());
+            isDateOrTimeSet = MainActivity.taskItems.get(position).getTimeIsSet();
             updateDeadlineSection();
         }
     }

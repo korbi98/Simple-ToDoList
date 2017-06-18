@@ -96,12 +96,12 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
 
         undoDeleteSnack = Snackbar
                 .make(findViewById(R.id.coordinatorlayout), "", Snackbar.LENGTH_LONG)
-                .setAction(R.string.undoDelete, new View.OnClickListener()
+                .setAction(R.string.undo_delete, new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View v)
                     {
-                        Toast.makeText(getApplicationContext(), "UNDO pressed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.undo_pressed), Toast.LENGTH_LONG).show();
                         for (Task t : undoTaskItems)
                         {
                             taskItems.add(t);
@@ -130,6 +130,13 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
             }
         });
 
+        if (settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false))
+        {
+            for (Task t : taskItems)
+            {
+                if (t.getTimeIsSet() == Task.DATE_AND_TIME) t.setTimeIsSet(Task.JUST_DATE);
+            }
+        }
 
         updateWidget();
     }
@@ -141,6 +148,16 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
         updateWidget();
         if(taskItems.size() == 0) emptylist.setVisibility(View.VISIBLE);
         else emptylist.setVisibility(View.GONE);
+
+        if (settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false))
+        {
+            for (Task t : taskItems)
+            {
+                if (t.getTimeIsSet() == Task.DATE_AND_TIME) t.setTimeIsSet(Task.JUST_DATE);
+            }
+        }
+
+        adapter.sort();
     }
 
     @Override
@@ -394,11 +411,11 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
     {
         if (undoTaskItems.size() == 1)
         {
-            undoDeleteSnack.setText(R.string.oneTaskDeleted);
+            undoDeleteSnack.setText(R.string.one_task_deleted);
         }
         else
         {
-            undoDeleteSnack.setText(String.format(getString(R.string.multipleTasksDeleted),
+            undoDeleteSnack.setText(String.format(getString(R.string.multiple_tasks_deleted),
                                                             undoTaskItems.size()));
         }
     }

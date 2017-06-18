@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -16,6 +16,7 @@ import com.korbi.todolist.ui.Settings;
 import com.korbi.todolist.todolist.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -116,27 +117,45 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
         sort();
     }
 
-    public void sort() {
+    public void sort()
+    {
         Collections.sort(tasks, new Comparator<Task>() {
             @Override
-            public int compare(Task t1, Task t2) {
+            public int compare(Task t1, Task t2)
+            {
 
                 int sortState = t1.getState() - t2.getState();      // highest sorting rule
 
-                if (sortState != 0) {
+                if (sortState != 0)
+                {
                     return sortState;
                 }
 
-                int sortPriority = t2.getPriority() - t1.getPriority();
+                if (settings.getBoolean(Settings.DEADLINE_FIRST, false))
+                {
+                    if (t1.getDeadline().compareTo(t2.getDeadline()) != 0)
+                    {
+                        return t1.getDeadline().compareTo(t2.getDeadline());
+                    }
 
-                if (sortPriority != 0) {
-                    return sortPriority;
+                    int sortPriority = t2.getPriority() - t1.getPriority();
+
+                    if (sortPriority != 0)
+                    {
+                        return sortPriority;
+                    }
                 }
+                else
+                {
+                    int sortPriority = t2.getPriority() - t1.getPriority();
 
-                if (t1.getDeadline().compareTo(t2.getDeadline()) != 0) {
-                    return t1.getDeadline().compareTo(t2.getDeadline());
+                    if (sortPriority != 0) {
+                        return sortPriority;
+                    }
+                    if (t1.getDeadline().compareTo(t2.getDeadline()) != 0) {
+                        return t1.getDeadline().compareTo(t2.getDeadline());
+                    }
                 }
-
                 return t1.getId() - t2.getId(); // least important sorting rule
             }
         });
@@ -145,62 +164,62 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
     private void setDeadlineRemainingTime(RemoteViews row, int position)
     {
         Task task = tasks.get(position);
-        int taskYear = Integer.parseInt(yearOnly.format(task.getDeadline()));
-        boolean includeTime = settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false);
+        Calendar taskCal = Calendar.getInstance();
+        Calendar currentCal = Calendar.getInstance();
+        taskCal.setTime(task.getDeadline());
+        currentCal.setTimeInMillis(System.currentTimeMillis());
 
-        if (taskYear < 2900)
+        boolean timeIsSet = task.getTimeIsSet() == Task.DATE_AND_TIME;
+        boolean deadlineIsSet = task.getTimeIsSet() != Task.NO_DEADLINE;
+        boolean includeTime = settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false) && timeIsSet;
+        boolean showRemainingTime = settings.getBoolean(Settings.REMAINING_TIME_INSTEAD_OF_DATE, false);
+        String deadlineHour = showTime.format(task.getDeadline());
+        String deadlineDate = showFullDate.format(task.getDeadline());
+        int remainingDays = (taskCal.get(Calendar.YEAR) - currentCal.get(Calendar.YEAR)) * 365 +
+                taskCal.get(Calendar.DAY_OF_YEAR) - currentCal.get(Calendar.DAY_OF_YEAR);
+        int remainingTime = taskCal.get(Calendar.HOUR_OF_DAY) - currentCal.get(Calendar.HOUR_OF_DAY);
+
+        String deadlineStr = "";
+
+        Log.d("isDedlineSet", String.valueOf(task.getTimeIsSet()));
+
+        if (deadlineIsSet && !showRemainingTime)
         {
-            if (settings.getBoolean(Settings.DATE_INSTEAD_OF_REMAINING_TIME, false))
+            if (includeTime)
             {
-                String deadlineStr;
-
-                if (includeTime)
-                {
-                    if (showFullDate.format(task.getDeadline()) == showFullDate.format(System.currentTimeMillis()))
-                    {
-                        deadlineStr = showTime.format(task.getDeadline()); // if current date == deadline date show only time
-                    }
-                    else deadlineStr = showFullDate.format(task.getDeadline()); //else show date as for time there is not enough space in the widget
-                }
+                if (remainingDays == 0) deadlineStr = deadlineHour;
+                else if (remainingDays == 1)
+                    deadlineStr = context.getString(R.string.tomorow);
+                else deadlineStr = deadlineDate;
+            }
+            else
+            {
+                if (remainingDays == 0) deadlineStr = context.getString(R.string.today);
+                else if (remainingDays == 1) deadlineStr = context.getString(R.string.tomorow);
+                else deadlineStr = deadlineDate;
+            }
+        }
+        else if (deadlineIsSet)
+        {
+            if (includeTime && remainingDays == 0)
+            {
+                deadlineStr = String.valueOf(remainingTime) + context.getString(R.string.hours_till_deadline);
+            }
+            else
+            {
+                if (remainingDays == 0) deadlineStr = context.getString(R.string.today);
+                else if (remainingDays == 1) deadlineStr = context.getString(R.string.tomorow);
                 else
                 {
-                    if (showFullDate.format(task.getDeadline()) == showFullDate.format(System.currentTimeMillis()))
-                    {
-                        deadlineStr = context.getString(R.string.today); //if current date == deadline date show "today"
-                    }
-                    else deadlineStr = showFullDate.format(task.getDeadline()); //else show date
-                }
-                row.setTextViewText(R.id.widget_list_deadline, deadlineStr);
-
-                if (task.getDeadline().getTime() - System.currentTimeMillis() < 0) //if time difference is negative make string red
-                {
-                    row.setTextColor(R.id.widget_list_deadline, Color.RED);
+                    deadlineStr = String.valueOf(remainingDays) +
+                            context.getString(R.string.days_till_deadline);
                 }
             }
-            else {
+        }
+        row.setTextViewText(R.id.widget_list_deadline, deadlineStr);
 
-                long deadline = task.getDeadline().getTime() / (24 * 3600 * 1000)
-                        - System.currentTimeMillis() / (24 * 3600 * 1000);
-
-                String remainingTimeStr = context.getString(R.string.daysTillDeadline);
-
-                if (deadline <= 1 && deadline > -1 &&
-                        settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false) == true) {
-                    remainingTimeStr = context.getString(R.string.hoursTillDeadline);
-                    deadline = task.getDeadline().getTime() / (3600 * 1000)
-                            - System.currentTimeMillis() / (3600 * 1000);
-
-                    row.setTextViewText(R.id.widget_list_deadline, String.valueOf(deadline) + remainingTimeStr);
-                    if (deadline < 0) {
-                        row.setTextColor(R.id.widget_list_deadline, Color.RED);
-                    }
-                } else if (deadline < 0) {
-                    row.setTextColor(R.id.widget_list_deadline, Color.RED);
-                }
-
-                row.setTextViewText(R.id.widget_list_deadline, String.valueOf(deadline) + remainingTimeStr);
-            }
-
-        } else row.setTextViewText(R.id.widget_list_deadline, "");
+        if (includeTime && remainingTime < 0 && remainingDays == 0)
+            row.setTextColor(R.id.widget_list_deadline, Color.RED);
+        else if (remainingDays < 0) row.setTextColor(R.id.widget_list_deadline, Color.RED);
     }
 }

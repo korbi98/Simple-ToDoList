@@ -21,12 +21,14 @@ public class Settings extends AppCompatActivity
     public static final String INCLUDE_TIME_SETTING = "createEventSetting";
     public static final String SET_DIVIDERS = "dividers";
     public static final String STANDARD_PRIORITY_SETTING = "standartPriority";
-    public static final String DATE_INSTEAD_OF_REMAINING_TIME = "dateortime";
+    public static final String REMAINING_TIME_INSTEAD_OF_DATE = "dateortime";
     public static final String PREVIOUS_PRIORITY = "previouspriority";
+    public static final String DEADLINE_FIRST = "deadlinefirst";
 
     private CheckBox includeTimeCheckBox;
     private CheckBox setDividers;
     private CheckBox dateOrTime;
+    private CheckBox deadlineFirst;
     private Spinner defaultPriority;
 
     private SharedPreferences settings = MainActivity.settings;
@@ -43,11 +45,13 @@ public class Settings extends AppCompatActivity
         includeTimeCheckBox = (CheckBox) findViewById(R.id.IncludeTimeInDeadline);
         setDividers = (CheckBox) findViewById(R.id.setDividersCheckbox);
         dateOrTime = (CheckBox) findViewById(R.id.dateOrTimeCheckbox);
+        deadlineFirst = (CheckBox) findViewById(R.id.deadline_before_priority);
         defaultPriority = (Spinner) findViewById(R.id.defaultPrioritySpinner);
 
         includeTimeCheckBox.setChecked(settings.getBoolean(INCLUDE_TIME_SETTING, false));
         setDividers.setChecked(settings.getBoolean(SET_DIVIDERS, false));
-        dateOrTime.setChecked(settings.getBoolean(DATE_INSTEAD_OF_REMAINING_TIME, false));
+        dateOrTime.setChecked(settings.getBoolean(REMAINING_TIME_INSTEAD_OF_DATE, false));
+        deadlineFirst.setChecked(settings.getBoolean(DEADLINE_FIRST, false));
         defaultPriority.setSelection(settings.getInt(STANDARD_PRIORITY_SETTING, 0));
 
     }
@@ -82,7 +86,8 @@ public class Settings extends AppCompatActivity
     {
         editor.putBoolean(INCLUDE_TIME_SETTING, includeTimeCheckBox.isChecked());
         editor.putBoolean(SET_DIVIDERS, setDividers.isChecked());
-        editor.putBoolean(DATE_INSTEAD_OF_REMAINING_TIME, dateOrTime.isChecked());
+        editor.putBoolean(REMAINING_TIME_INSTEAD_OF_DATE, dateOrTime.isChecked());
+        editor.putBoolean(DEADLINE_FIRST, deadlineFirst.isChecked());
         editor.putInt(STANDARD_PRIORITY_SETTING, defaultPriority.getSelectedItemPosition());
         editor.commit();
         MainActivity.adapter.notifyDataSetChanged();

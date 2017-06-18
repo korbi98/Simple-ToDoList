@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -15,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.os.Handler;
 
 import com.korbi.todolist.ui.AddEditTask;
 import com.korbi.todolist.ui.MainActivity;
@@ -23,7 +23,7 @@ import com.korbi.todolist.ui.Settings;
 import com.korbi.todolist.todolist.R;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -149,62 +149,62 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
 
     private void setDeadlineRemainingTime(ToDoListRecyclerAdapter.TaskViewHolder holder, int taskYear)
     {
-        boolean includeTime = settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false);
+        Calendar taskCal = Calendar.getInstance();
+        Calendar currentCal = Calendar.getInstance();
+        taskCal.setTime(task.getDeadline());
+        currentCal.setTimeInMillis(System.currentTimeMillis());
 
-        if (taskYear < 2900)
+        boolean timeIsSet = task.getTimeIsSet() == Task.DATE_AND_TIME;
+        boolean deadlineIsSet = task.getTimeIsSet() != Task.NO_DEADLINE;
+        boolean includeTime = settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false) && timeIsSet;
+        boolean showRemainingTime = settings.getBoolean(Settings.REMAINING_TIME_INSTEAD_OF_DATE, false);
+        String deadlineHour = showTime.format(task.getDeadline());
+        String deadlineDate = showFullDate.format(task.getDeadline());
+        int remainingDays = (taskCal.get(Calendar.YEAR) - currentCal.get(Calendar.YEAR)) * 365 +
+                taskCal.get(Calendar.DAY_OF_YEAR) - currentCal.get(Calendar.DAY_OF_YEAR);
+        int remainingTime = taskCal.get(Calendar.HOUR_OF_DAY) - currentCal.get(Calendar.HOUR_OF_DAY);
+
+        String deadlineStr = "";
+
+        if (deadlineIsSet && !showRemainingTime)
         {
-
-            if (settings.getBoolean(Settings.DATE_INSTEAD_OF_REMAINING_TIME, false))
+            if (includeTime)
             {
-                String deadlineStr;
-
-                if (includeTime)
-                {
-                    if (showFullDate.format(task.getDeadline()).equals(showFullDate.format(System.currentTimeMillis())))
-                    {
-                        deadlineStr = showTime.format(task.getDeadline()); // if current date == deadline date show only time
-                    }
-                    else deadlineStr = showFullDate.format(task.getDeadline()) + "\n" + showTime.format(task.getDeadline()); //else show date + time
-                }
-                else
-                {
-                    if (showFullDate.format(task.getDeadline()).equals(showFullDate.format(System.currentTimeMillis())))
-                    {
-                        deadlineStr = context.getString(R.string.today); //if current date == deadline date show "today"
-                    }
-                    else deadlineStr = showFullDate.format(task.getDeadline()); //else show date
-                }
-                holder.task_deadline.setText(deadlineStr);
-
-                if (task.getDeadline().getTime() - System.currentTimeMillis() < 0) //if time difference is negative make string red
-                {
-                    holder.task_deadline.setTextColor(Color.RED);
-                }
+                if (remainingDays == 0) deadlineStr = deadlineHour;
+                else if (remainingDays == 1)
+                    deadlineStr = context.getString(R.string.tomorow) + "\n"
+                            + deadlineHour;
+                else deadlineStr = deadlineDate + "\n" + deadlineHour;
             }
             else
             {
-                long deadline = task.getDeadline().getTime() / (24 * 3600 * 1000)
-                        - System.currentTimeMillis() / (24 * 3600 * 1000);
-
-                String remainingTimeStr = context.getString(R.string.daysTillDeadline);
-
-                if (deadline <= 1 && deadline > -1 && includeTime)
-                {
-                    remainingTimeStr = context.getString(R.string.hoursTillDeadline);
-                    deadline = task.getDeadline().getTime() / (3600 * 1000)
-                            - System.currentTimeMillis() / (3600 * 1000);
-
-                    holder.task_deadline.setText(String.valueOf(deadline) + remainingTimeStr);
-                    if (deadline < 0) {
-                        holder.task_deadline.setTextColor(Color.RED);
-                    }
-                } else if (deadline < 0) {
-                    holder.task_deadline.setTextColor(Color.RED);
-                }
-                holder.task_deadline.setText(String.valueOf(deadline) + remainingTimeStr);
+                if (remainingDays == 0) deadlineStr = context.getString(R.string.today);
+                else if (remainingDays == 1) deadlineStr = context.getString(R.string.tomorow);
+                else deadlineStr = deadlineDate;
             }
+        }
+        else if (deadlineIsSet)
+        {
+            if (includeTime && remainingDays == 0)
+            {
+                deadlineStr = String.valueOf(remainingTime) + context.getString(R.string.hours_till_deadline);
+            }
+            else
+            {
+                if (remainingDays == 0) deadlineStr = context.getString(R.string.today);
+                else if (remainingDays == 1) deadlineStr = context.getString(R.string.tomorow);
+                else
+                {
+                    deadlineStr = String.valueOf(remainingDays) +
+                            context.getString(R.string.days_till_deadline);
+                }
+            }
+        }
+        holder.task_deadline.setText(deadlineStr);
 
-        } else holder.task_deadline.setText("");
+        if (includeTime && remainingTime < 0 && remainingDays == 0)
+            holder.task_deadline.setTextColor(Color.RED);
+        else if (remainingDays < 0) holder.task_deadline.setTextColor(Color.RED);
     }
 
     public void sort()
@@ -221,18 +221,31 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
                     return sortState;
                 }
 
-                int sortPriority = t2.getPriority() - t1.getPriority();
-
-                if (sortPriority != 0)
+                if (settings.getBoolean(Settings.DEADLINE_FIRST, false))
                 {
-                    return sortPriority;
-                }
+                    if (t1.getDeadline().compareTo(t2.getDeadline()) != 0)
+                    {
+                        return t1.getDeadline().compareTo(t2.getDeadline());
+                    }
 
-                if (t1.getDeadline().compareTo(t2.getDeadline()) != 0)
+                    int sortPriority = t2.getPriority() - t1.getPriority();
+
+                    if (sortPriority != 0)
+                    {
+                        return sortPriority;
+                    }
+                }
+                else
                 {
-                    return t1.getDeadline().compareTo(t2.getDeadline());
-                }
+                    int sortPriority = t2.getPriority() - t1.getPriority();
 
+                    if (sortPriority != 0) {
+                        return sortPriority;
+                    }
+                    if (t1.getDeadline().compareTo(t2.getDeadline()) != 0) {
+                        return t1.getDeadline().compareTo(t2.getDeadline());
+                    }
+                }
                 return t1.getId() - t2.getId(); // least important sorting rule
             }
         });
@@ -288,13 +301,12 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
 
     private void setDividers(ToDoListRecyclerAdapter.TaskViewHolder holder)
     {
-        if(MainActivity.settings.getBoolean(Settings.SET_DIVIDERS, false))
+        if(MainActivity.settings.getBoolean(Settings.SET_DIVIDERS, true))
         {
             holder.divider.setVisibility(View.VISIBLE);
         }
         else holder.divider.setVisibility(View.GONE);
     }
-
 }
 
 

@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/StandardPriorityLabel"
+            android:text="@string/default_priority_label"
             android:textColor="@android:color/black"/>
 
         <Spinner
@@ -27,12 +27,41 @@
             android:gravity="right"
             android:layout_marginRight="-10dp"
             android:entries="@array/default_priority"
-            android:prompt="@string/StandardPriorityLabel"/>
+            android:prompt="@string/default_priority_label"/>
 
     </LinearLayout>
 
     <View
         android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/set_divider_checkbox"
+            android:textAlignment="gravity"
+            android:textColor="@android:color/black" />
+
+        <CheckBox
+            android:id="@+id/setDividersCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
@@ -48,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/IncludeTimeInDeadline"
+            android:text="@string/include_time_in_deadline"
             android:textAlignment="gravity"
             android:gravity="center_vertical"
             android:textColor="@android:color/black"/>
@@ -71,26 +100,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/setDividersCheckbox"
+            android:text="@string/date_or_remaining_time"
             android:layout_weight="1"
             android:textAlignment="gravity"
             android:gravity="center_vertical"
             android:textColor="@android:color/black"/>
 
         <CheckBox
-            android:id="@+id/setDividersCheckbox"
+            android:id="@+id/dateOrTimeCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 
     </LinearLayout>
 
     <View
-        android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
@@ -106,14 +135,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/DateOrRemainingTime"
+            android:text="@string/deadline_before_priority"
             android:layout_weight="1"
             android:textAlignment="gravity"
             android:gravity="center_vertical"
             android:textColor="@android:color/black"/>
 
         <CheckBox
-            android:id="@+id/dateOrTimeCheckbox"
+            android:id="@+id/deadline_before_priority"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 

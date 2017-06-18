@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:text="@string/PriorityLabel" />
+            android:text="@string/priority_label" />
 
         <SeekBar
             android:id="@+id/SelectPriority"
@@ -100,7 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/SetDeadlineLabel" />
+            android:text="@string/set_deadline_label" />
 
         <TextView
             android:id="@+id/DeadlineTextView"
@@ -126,7 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:layout_gravity="center_vertical"
-            android:text="@string/EventCheckBox" />
+            android:text="@string/event_checkbox" />
 
         <Button
             android:id="@+id/resetDate"
@@ -135,7 +135,7 @@
             android:layout_weight="0.75"
             android:onClick="resetDeadline"
             android:layout_gravity="center_vertical"
-            android:text="@string/resetDateBtn"
+            android:text="@string/reset_deadline_btn"
             android:textSize="12sp" />
 
         <Button
@@ -145,7 +145,7 @@
             android:layout_weight="0.75"
             android:onClick="setDeadline"
             android:layout_gravity="center_vertical"
-            android:text="@string/setDateBtn"
+            android:text="@string/set_date_btn"
             android:textSize="12sp" />
 
     </LinearLayout>

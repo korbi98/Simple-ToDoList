@@ -32,6 +32,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
     private static final String COL_DONE = "done";
     private static final String COL_DEADLINE = "deadline";
     private static final String COL_PRIORITY = "priority";
+    private static final String COL_TIME_IS_SET = "time_is_set";
 
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -45,7 +46,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
     {
         String createTable = "CREATE TABLE " + TASK_TABLE + " ( " + COL_ID + " INTEGER PRIMARY KEY, "
                 + COL_TASK + " TEXT, " + COL_DEADLINE + " TEXT, " + COL_PRIORITY + " INTEGER, "
-                + COL_DONE + " INTEGER NOT NULL)";
+                + COL_DONE + " INTEGER NOT NULL, " + COL_TIME_IS_SET + " INTEGER NOT NULL)";
 
         db.execSQL(createTable);
     }
@@ -65,7 +66,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
         values.put(COL_DONE, task.getState());
         values.put(COL_DEADLINE, dateFormatter.format(task.getDeadline()));
         values.put(COL_PRIORITY, task.getPriority());
-
+        values.put(COL_TIME_IS_SET, task.getTimeIsSet());
 
         db.insert(TASK_TABLE, null, values);
         db.close();
@@ -85,7 +86,8 @@ public class TaskDbHelper extends SQLiteOpenHelper
             do
             {
                 Task task = new Task(cursor.getInt(0), cursor.getString(1),
-                        parseDate(cursor.getString(2)), cursor.getInt(3), cursor.getInt(4));
+                        parseDate(cursor.getString(2)), cursor.getInt(3), cursor.getInt(4),
+                        cursor.getInt(5));
 
                 taskList.add(task);
             } while (cursor.moveToNext());
@@ -108,7 +110,8 @@ public class TaskDbHelper extends SQLiteOpenHelper
             do
             {
                 Task task = new Task(cursor.getInt(0), cursor.getString(1),
-                        parseDate(cursor.getString(2)), cursor.getInt(3), cursor.getInt(4));
+                        parseDate(cursor.getString(2)), cursor.getInt(3), cursor.getInt(4),
+                        cursor.getInt(5));
 
                 taskList.add(task);
             } while (cursor.moveToNext());
@@ -126,6 +129,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
         values.put(COL_DONE, task.getState());
         values.put(COL_PRIORITY, task.getPriority());
         values.put(COL_DEADLINE, dateFormatter.format(task.getDeadline()));
+        values.put(COL_TIME_IS_SET, task.getTimeIsSet());
 
         return db.update(TASK_TABLE, values, COL_ID + " =?",
                 new String[] { String.valueOf(task.getId()) });

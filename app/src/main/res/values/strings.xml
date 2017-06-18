@@ -1,45 +1,49 @@
 <resources>
     <string name="app_name">ToDoList</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_clear_completed_tasks">Clear</string>
+
+    <string name="action_clear_completed_tasks" translatable="false">Clear</string>
     <string name="confirm_message">All completed Tasks will be deleted!</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
     <string name="about">About</string>
-    <string name="AddTaskActivityTitle">Add new task</string>
-    <string name="AboutAppName">About app</string>
-    <string name="AppInfo">A Simple, yet powerful app to manage your everyday life.
+    <string name="add_task_activity_title">Add new task</string>
+
+    <string name="app_info">A Simple, yet powerful app to manage your everyday life.
         \nIf you like the app, please consider rating it on the Playstore and sharing
-        it with your friends. \n \nSourcecode:\nhttps://github.com/korbi98/ToDoList
-        </string>
-    <string name="contact_me">Contact me: korbinianmoser98@gmail.com</string>
-    <string name="rateAppButton">Rate this App</string>
-    <string name="DonateButton">Make a small Donation</string>
-    <string name="ConfirmTasks" translatable="false">OK</string>
-    <string name="setDateBtn">Set</string>
-    <string name="daysTillDeadline" translatable="false">d</string>
-    <string name="hoursTillDeadline" translatable="false">h</string>
+        it with your friends.</string>
+    <string name="contact_me">Contact me: info@korbinian-moser.de</string>
+    <string name="rate_app_button">Rate this App</string>
+    <string name="donate_button" translatable="false">Make a small Donation</string>
+    <string name="confirm_tasks" translatable="false">OK</string>
+    <string name="set_date_btn">Set</string>
+    <string name="days_till_deadline" translatable="false">d</string>
+    <string name="hours_till_deadline" translatable="false">h</string>
     <string name="settings">Settings</string>
-    <string name="IncludeTimeInDeadline">Also include a time and not only a date in the deadline</string>
-    <string name="EventCheckBox">Store in calendar</string>
-    <string name="EmptyNameErrorMessage">The name of the task cannot be empty</string>
-    <string name="PriorityLabel">Priority:</string>
+    <string name="include_time_in_deadline">Also include a time and not only a date in the deadline</string>
+    <string name="event_checkbox">Store in calendar</string>
+    <string name="empty_name_error">The name of the task cannot be empty</string>
+    <string name="priority_label">Priority:</string>
     <string name="low">Low</string>
     <string name="normal">Normal</string>
     <string name="high">High</string>
-    <string name="SetDeadlineLabel">Deadline:</string>
-    <string name="resetDateBtn">Reset</string>
-    <string name="StandardPriorityLabel">Default priority:</string>
-    <string name="wrongtime">Time is in the past.\nTime has been set to one hour from now</string>
-    <string name="oneTaskDeleted">Deleted one task!</string>
-    <string name="undoDelete">UNDO</string>
-    <string name="setDividersCheckbox">Use visible dividers in the tasklist</string>
-    <string name="add_widget">Add widget</string>
-    <string name="DateOrRemainingTime">Show the date of the deadline instead of the remaining time</string>
+    <string name="set_deadline_label">Deadline:</string>
+    <string name="reset_deadline_btn">Reset</string>
+    <string name="default_priority_label">Default priority:</string>
+    <string name="wrong_time">Time is in the past.\nTime has been set to one hour from now</string>
+    <string name="one_task_deleted">Deleted one task!</string>
+    <string name="undo_delete">UNDO</string>
+    <string name="set_divider_checkbox">Use visible dividers in the tasklist</string>
+    <string name="add_widget" translatable="false">Add widget</string>
+    <string name="date_or_remaining_time">Show the remaining time instead of the date</string>
     <string name="today">today</string>
     <string name="empty_list">Create new tasks by tapping the button below \\nTo delete tasks swipe from right to left</string>
-    <string name="multipleTasksDeleted">Deleted %d tasks!</string>
+    <string name="multiple_tasks_deleted">Deleted %d tasks!</string>
     <string name="new_task_hint">New task</string>
+    <string name="undo_pressed">UNDO pressed</string>
+    <string name="deadline_before_priority">Tasks get sorted by deadline first and then by priority</string>
+    <string name="tomorow">tomorow</string>
+    <string name="sourcecode">Sourcecode:</string>
+    <string name="github_link" translatable="false">https://github.com/korbi98/ToDoList/tree/master</string>
 
     <string-array name="default_priority">
 
