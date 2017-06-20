@@ -120,6 +120,23 @@ public class TaskDbHelper extends SQLiteOpenHelper
         return taskList;
     }
 
+    public Task getTask(int id)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TASK_TABLE, new String[]
+                    {COL_ID, COL_TASK, COL_DONE}, COL_ID + "=?", new String[]
+                    {String.valueOf(id)}, null, null,
+                null, null);
+
+        if (cursor != null) cursor.moveToFirst();
+
+        Task task = new Task(cursor.getInt(0), cursor.getString(1),
+                parseDate(cursor.getString(2)), cursor.getInt(3), cursor.getInt(4),
+                cursor.getInt(5));
+        return task;
+    }
+
     public int updateTask(Task task)
     {
         SQLiteDatabase db = this.getWritableDatabase();

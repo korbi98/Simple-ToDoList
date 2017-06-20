@@ -2,18 +2,18 @@
 <resources>
     <string name="app_name">ToDoList</string>
 
-    <string name="add_task_activity_title">Neue Aufgabe</string>
+    <string name="add_task_activity_title">Hinzufügen/Ändern</string>
     <string name="date_or_remaining_time">Die verbleibende Zeit statt dem Datum anzeigen</string>
     <string name="empty_name_error">Die Bezeichnung der Aufgabe kann nicht leer sein</string>
     <string name="event_checkbox">Im Kalendar speichern</string>
     <string name="include_time_in_deadline">Auch eine Zeit, statt nur ein Datum festlegen</string>
     <string name="priority_label">Priorität</string>
     <string name="set_deadline_label">Muss erledigt sein bis:</string>
-    <string name="default_priority_label">Standart Priorität</string>
+    <string name="default_priority_label">Standart Priorität:</string>
 
     <string name="confirm_message">Alle beendeten Aufgaben werden gelöscht!</string>
     <string name="contact_me">Email: info@korbinian-moser.de</string>
-    <string name="empty_list">Erstelle neue Aufgaben, indem du auf den Button unten tippst\nWische von Rechts nach Links um Aufgaben zu löschen</string>
+    <string name="empty_list">Tippe auf den + Button für neue Aufgaben\nWische nach Links um Aufgaben zu löschen</string>
     <string name="high">Hoch</string>
     <string name="low">Niedrig</string>
     <string name="multiple_tasks_deleted">%d Aufgaben gelöscht</string>
@@ -23,7 +23,7 @@
     <string name="rate_app_button">Bewerte die App</string>
     <string name="reset_deadline_btn">Zurücksetzen</string>
     <string name="set_date_btn">Datum</string>
-    <string name="set_divider_checkbox">Trennlinien zwischen den Aufgaben zeigen</string>
+    <string name="set_divider_checkbox">Keine Trennlinien zwischen den Aufgaben zeigen</string>
     <string name="settings">Einstellungen</string>
     <string name="today">Heute</string>
     <string name="undo_delete">Rückgängig</string>
@@ -37,4 +37,11 @@
     <string name="deadline_before_priority">Aufgaben werden erst nach Datum und dann nach Wichtigkeit sortiert</string>
     <string name="tomorow">Morgen</string>
     <string name="sourcecode">Quellcode:</string>
+
+    <string-array name="default_priority">
+        <item>Niedrig</item>
+        <item>Normal</item>
+        <item>Hoch</item>
+        <item>Zuletzt verwendete</item>
+    </string-array>
 </resources>

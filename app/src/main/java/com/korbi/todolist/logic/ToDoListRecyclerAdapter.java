@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -301,7 +300,7 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
 
     private void setDividers(ToDoListRecyclerAdapter.TaskViewHolder holder)
     {
-        if(MainActivity.settings.getBoolean(Settings.SET_DIVIDERS, true))
+        if(!MainActivity.settings.getBoolean(Settings.NO_DIVIDERS, false))
         {
             holder.divider.setVisibility(View.VISIBLE);
         }

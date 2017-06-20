@@ -3,7 +3,7 @@
     android:initialKeyguardLayout="@layout/to_do_list_widget"
     android:initialLayout="@layout/to_do_list_widget"
     android:minHeight="60dp"
-    android:minWidth="120dp"
+    android:minWidth="180dp"
     android:previewImage="@drawable/ic_icon_square_widget_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"

@@ -8,7 +8,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 
@@ -19,7 +18,7 @@ import com.korbi.todolist.widget.ToDoListWidget;
 public class Settings extends AppCompatActivity
 {
     public static final String INCLUDE_TIME_SETTING = "createEventSetting";
-    public static final String SET_DIVIDERS = "dividers";
+    public static final String NO_DIVIDERS = "dividers";
     public static final String STANDARD_PRIORITY_SETTING = "standartPriority";
     public static final String REMAINING_TIME_INSTEAD_OF_DATE = "dateortime";
     public static final String PREVIOUS_PRIORITY = "previouspriority";
@@ -49,10 +48,10 @@ public class Settings extends AppCompatActivity
         defaultPriority = (Spinner) findViewById(R.id.defaultPrioritySpinner);
 
         includeTimeCheckBox.setChecked(settings.getBoolean(INCLUDE_TIME_SETTING, false));
-        setDividers.setChecked(settings.getBoolean(SET_DIVIDERS, false));
+        setDividers.setChecked(settings.getBoolean(NO_DIVIDERS, false));
         dateOrTime.setChecked(settings.getBoolean(REMAINING_TIME_INSTEAD_OF_DATE, false));
         deadlineFirst.setChecked(settings.getBoolean(DEADLINE_FIRST, false));
-        defaultPriority.setSelection(settings.getInt(STANDARD_PRIORITY_SETTING, 0));
+        defaultPriority.setSelection(settings.getInt(STANDARD_PRIORITY_SETTING, 1));
 
     }
 
@@ -85,12 +84,11 @@ public class Settings extends AppCompatActivity
     public void save()
     {
         editor.putBoolean(INCLUDE_TIME_SETTING, includeTimeCheckBox.isChecked());
-        editor.putBoolean(SET_DIVIDERS, setDividers.isChecked());
+        editor.putBoolean(NO_DIVIDERS, setDividers.isChecked());
         editor.putBoolean(REMAINING_TIME_INSTEAD_OF_DATE, dateOrTime.isChecked());
         editor.putBoolean(DEADLINE_FIRST, deadlineFirst.isChecked());
         editor.putInt(STANDARD_PRIORITY_SETTING, defaultPriority.getSelectedItemPosition());
         editor.commit();
-        MainActivity.adapter.notifyDataSetChanged();
         updateWidget();
         finish();
     }

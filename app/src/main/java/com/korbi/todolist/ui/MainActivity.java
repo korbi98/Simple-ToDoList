@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
     public static TaskDbHelper db;
     public static List<Task> taskItems;
     public static List<Task> undoTaskItems;
-    public static ToDoListRecyclerAdapter adapter;
+    public  ToDoListRecyclerAdapter adapter;
     public RecyclerView rv;
     private TextView emptylist;
 
@@ -67,8 +67,7 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
 
         emptylist = (TextView) findViewById(R.id.emptylistMessage);
 
-        if(taskItems.size() == 0) emptylist.setVisibility(View.VISIBLE);
-        else emptylist.setVisibility(View.GONE);
+        checkIfToShowEmptyListView();
 
         undoTaskItems = new ArrayList<>();
         adapter = new ToDoListRecyclerAdapter(taskItems, getApplicationContext());
@@ -81,7 +80,6 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
         rv.setItemAnimator(new ToDoListAnimator());
 
         setUpItemSwipe();
-        //setUpRecyclerViewAnimationDecoration(); //TODO not shure if better with or without
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -123,8 +121,7 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
                 {
                     db.deleteTask(t.getId());
                     updateWidget();
-                    if(taskItems.size() == 0) emptylist.setVisibility(View.VISIBLE);
-                    else emptylist.setVisibility(View.GONE);
+                    checkIfToShowEmptyListView();
                 }
                 undoTaskItems.clear();
             }
@@ -145,7 +142,7 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
     public void onResume()
     {
         super.onResume();
-        updateWidget();
+
         if(taskItems.size() == 0) emptylist.setVisibility(View.VISIBLE);
         else emptylist.setVisibility(View.GONE);
 
@@ -157,7 +154,15 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
             }
         }
 
+        /* Normally it should be enough to call sort() and notifydatasetchanged() but then tasks with no deadline get sometimes shown above ones with deadline
+         * I don't understand why, but reloading the tasks from the db and resetting the adapter solves this*/
+
+        taskItems = db.getAllTasks();
+        adapter = new ToDoListRecyclerAdapter(taskItems, getApplicationContext());
         adapter.sort();
+
+        rv.setAdapter(adapter);
+        updateWidget();
     }
 
     @Override
@@ -234,6 +239,7 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
                         int size = taskItems.size();
                         adapter.clear();
                         adapter.notifyItemRangeRemoved(0, size);
+                        checkIfToShowEmptyListView();
                     }
                 })
                 .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -273,10 +279,6 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
             @Override
             public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder)
             {
-//                int position = viewHolder.getAdapterPosition();
-//                ToDoListRecyclerAdapter recyclerAdapter =
-//                        (ToDoListRecyclerAdapter) recyclerView.getAdapter();
-
                 return super.getSwipeDirs(recyclerView, viewHolder);
             }
 
@@ -330,74 +332,6 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
         mItemTouchHelper.attachToRecyclerView(rv);
     }
 
-    private void setUpRecyclerViewAnimationDecoration()
-    {
-        rv.addItemDecoration(new RecyclerView.ItemDecoration()
-        {
-            Drawable backgroud;
-            boolean initiated;
-
-            private void init()
-            {
-                backgroud = new ColorDrawable(Color.RED);
-                initiated = true;
-            }
-
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state)
-            {
-                if (!initiated) init();
-
-                if (parent.getItemAnimator().isRunning())
-                {
-
-                    View lastViewComingDown = null;
-                    View firstViewComingUp = null;
-
-                    int left = 0;
-                    int right = parent.getRight();
-
-                    int top = 0;
-                    int bottom = 0;
-
-                    for (int i = 0; i < parent.getLayoutManager().getChildCount(); i++)
-                    {
-                        View child = parent.getLayoutManager().getChildAt(i);
-                        if(child.getTranslationY() < 0)
-                        {
-                            lastViewComingDown = child;
-                        }
-                        else if (child.getTranslationY() > 0)
-                        {
-                            if (firstViewComingUp == null) firstViewComingUp = child;
-                        }
-                    }
-
-                    if (lastViewComingDown != null && firstViewComingUp != null)
-                    {
-                        top = lastViewComingDown.getBottom() + (int)lastViewComingDown.getTranslationY();
-                        bottom = firstViewComingUp.getTop() + (int) firstViewComingUp.getTranslationY();
-                    }
-                    else if (lastViewComingDown != null)
-                    {
-                        top = lastViewComingDown.getBottom() + (int)lastViewComingDown.getTranslationY();
-                        bottom = lastViewComingDown.getBottom();
-                    }
-                    else if (firstViewComingUp != null)
-                    {
-                        top = firstViewComingUp.getTop();
-                        bottom = firstViewComingUp.getTop() + (int) firstViewComingUp.getTranslationY();
-                    }
-
-                    backgroud.setBounds(left, top, right, bottom);
-                    backgroud.draw(c);
-                }
-
-                super.onDraw(c, parent, state);
-            }
-        });
-    }
-
     public void updateWidget()
     {
         Intent intent = new Intent(this, ToDoListWidget.class);
@@ -418,6 +352,12 @@ public class MainActivity extends AppCompatActivity //TODO create own Icon
             undoDeleteSnack.setText(String.format(getString(R.string.multiple_tasks_deleted),
                                                             undoTaskItems.size()));
         }
+    }
+
+    private void checkIfToShowEmptyListView()
+    {
+        if(taskItems.size() == 0) emptylist.setVisibility(View.VISIBLE);
+        else emptylist.setVisibility(View.GONE);
     }
 
 }

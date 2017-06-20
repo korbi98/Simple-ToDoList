@@ -6,7 +6,7 @@
     <string name="yes">yes</string>
     <string name="no">no</string>
     <string name="about">About</string>
-    <string name="add_task_activity_title">Add new task</string>
+    <string name="add_task_activity_title">Add or edit task</string>
 
     <string name="app_info">A Simple, yet powerful app to manage your everyday life.
         \nIf you like the app, please consider rating it on the Playstore and sharing
@@ -32,16 +32,16 @@
     <string name="wrong_time">Time is in the past.\nTime has been set to one hour from now</string>
     <string name="one_task_deleted">Deleted one task!</string>
     <string name="undo_delete">UNDO</string>
-    <string name="set_divider_checkbox">Use visible dividers in the tasklist</string>
+    <string name="set_divider_checkbox">Don\'t show visible dividers in the tasklist</string>
     <string name="add_widget" translatable="false">Add widget</string>
     <string name="date_or_remaining_time">Show the remaining time instead of the date</string>
     <string name="today">today</string>
-    <string name="empty_list">Create new tasks by tapping the button below \\nTo delete tasks swipe from right to left</string>
+    <string name="empty_list">Create new tasks by tapping the + button\nTo delete tasks swipe to the left</string>
     <string name="multiple_tasks_deleted">Deleted %d tasks!</string>
     <string name="new_task_hint">New task</string>
     <string name="undo_pressed">UNDO pressed</string>
     <string name="deadline_before_priority">Tasks get sorted by deadline first and then by priority</string>
-    <string name="tomorow">tomorow</string>
+    <string name="tomorow">tomorrow</string>
     <string name="sourcecode">Sourcecode:</string>
     <string name="github_link" translatable="false">www.github.com/korbi98/ToDoList/tree/master</string>
 
@@ -50,7 +50,7 @@
         <item>Low</item>
         <item>Normal</item>
         <item>High</item>
-        <item>Use previous priority</item>
+        <item>Last one used</item>
 
     </string-array>
 </resources>

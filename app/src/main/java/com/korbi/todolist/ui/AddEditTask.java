@@ -11,6 +11,7 @@ import android.provider.CalendarContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import com.korbi.todolist.logic.Task;
 import com.korbi.todolist.widget.ToDoListWidget;
@@ -43,7 +45,7 @@ public class AddEditTask extends AppCompatActivity
     SimpleDateFormat dateFormat;
     SimpleDateFormat dateTimeFormat;
 
-    final Calendar c = Calendar.getInstance();
+    Calendar c = Calendar.getInstance();
 
     SharedPreferences settings;
     SharedPreferences.Editor editor;
@@ -85,7 +87,7 @@ public class AddEditTask extends AppCompatActivity
         settings = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         editor = settings.edit();
 
-        if(settings.getInt(Settings.STANDARD_PRIORITY_SETTING, 0) == 3)
+        if(settings.getInt(Settings.STANDARD_PRIORITY_SETTING, 1) == 3)
         {
             selectPriority.setProgress(settings.getInt(Settings.PREVIOUS_PRIORITY, 1));
         }
@@ -145,13 +147,15 @@ public class AddEditTask extends AppCompatActivity
 
             int id = MainActivity.db.getLatestID() + 1;
 
+            if (c.get(Calendar.YEAR) < 100) c.set(Calendar.YEAR, 2200);
+
             Task newTask = new Task(id, newTaskEntry.getText().toString(),
                     c.getTime(), selectPriority.getProgress(), 0, isDateOrTimeSet);
 
+            Log.d("addCall", String.valueOf(c.get(Calendar.DAY_OF_YEAR)));
+
             MainActivity.db.addTask(newTask);
             MainActivity.taskItems.add(newTask);
-            MainActivity.adapter.sort();
-            MainActivity.adapter.notifyItemRangeChanged(0, MainActivity.taskItems.size());
 
             if (newTask.getTimeIsSet() != Task.NO_DEADLINE) createCalendarEvent(newTask);
 
@@ -169,7 +173,7 @@ public class AddEditTask extends AppCompatActivity
     {
         if (newTaskEntry.getText().toString().trim().length() > 0)
         {
-            if (c.get(Calendar.YEAR) < 100) c.set(Calendar.YEAR, 3000);
+            if (c.get(Calendar.YEAR) < 100) c.set(Calendar.YEAR, 2200);
 
             MainActivity.taskItems.get(position).setTaskname(newTaskEntry.getText().toString());
             MainActivity.taskItems.get(position).setPriority(selectPriority.getProgress());
@@ -177,8 +181,12 @@ public class AddEditTask extends AppCompatActivity
             MainActivity.taskItems.get(position).setTimeIsSet(isDateOrTimeSet);
 
             MainActivity.db.updateTask(MainActivity.taskItems.get(position));
-            MainActivity.adapter.sort();
-            MainActivity.adapter.notifyDataSetChanged();
+
+            if (MainActivity.taskItems.get(position).getTimeIsSet() != Task.NO_DEADLINE) createCalendarEvent(MainActivity.taskItems.get(position));
+
+            Log.d("cTime", String.valueOf(c.getTime()));
+            Log.d("tTime", String.valueOf(MainActivity.taskItems.get(position).getDeadline()));
+            Log.d("changeDay", String.valueOf(c.get(Calendar.DAY_OF_YEAR)));
 
             updateWidget();
             finish();
@@ -206,20 +214,23 @@ public class AddEditTask extends AppCompatActivity
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener()
                 {
-
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day)
                     {
-                        c.set(Calendar.YEAR, year);
-                        c.set(Calendar.MONTH, month);
-                        c.set(Calendar.DATE, day);
+                        Calendar calTest = Calendar.getInstance();
+                        calTest.set(Calendar.YEAR, year);
+                        calTest.set(Calendar.MONTH, month);
+                        calTest.set(Calendar.DATE, day);
+
+                        c.setTime(calTest.getTime()); // weird bug when setting c directly, that's why calTest is here
+
                         isDateOrTimeSet = Task.JUST_DATE;
                         updateDeadlineSection();
                     }
 
                 }, year, month, day);
 
-        //datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
+        datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
         datePickerDialog.show();
     }
 
@@ -241,14 +252,14 @@ public class AddEditTask extends AppCompatActivity
                         c.set(Calendar.HOUR_OF_DAY, hour);
                         c.set(Calendar.MINUTE, minute);
 
-//                        if (c.getTimeInMillis() - System.currentTimeMillis() < 1000)
-//                        {
-//                            Toast.makeText(getApplicationContext(), getString(R.string.wrong_time),
-//                                    Toast.LENGTH_LONG).show();
-//
-//                            c.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) + 1);
-//                            c.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
-//                        }
+                        if (c.getTimeInMillis() - System.currentTimeMillis() < 1000)
+                        {
+                            Toast.makeText(getApplicationContext(), getString(R.string.wrong_time),
+                                    Toast.LENGTH_LONG).show();
+
+                            c.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) + 1);
+                            c.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
+                        }
                         isDateOrTimeSet = Task.DATE_AND_TIME;
                         updateDeadlineSection();
                     }
@@ -267,6 +278,7 @@ public class AddEditTask extends AppCompatActivity
     public void resetDeadline(View v)
     {
         setCalendar(0, 0, 0, 0, 0);
+        isDateOrTimeSet = 0;
 
         updateDeadlineSection();
     }
@@ -331,6 +343,7 @@ public class AddEditTask extends AppCompatActivity
             newTaskEntry.setText(MainActivity.taskItems.get(position).getTaskname());
             selectPriority.setProgress(MainActivity.taskItems.get(position).getPriority());
             c.setTime(MainActivity.taskItems.get(position).getDeadline());
+            Log.d("prefill", String.valueOf(c.get(Calendar.DAY_OF_YEAR)));
             isDateOrTimeSet = MainActivity.taskItems.get(position).getTimeIsSet();
             updateDeadlineSection();
         }
