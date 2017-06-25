@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.korbi.todolist.database.TaskDbHelper;
 import com.korbi.todolist.logic.Task;
 import com.korbi.todolist.widget.ToDoListWidget;
 import com.korbi.todolist.todolist.R;
@@ -52,6 +53,8 @@ public class AddEditTask extends AppCompatActivity
 
     private int position;
     private int isDateOrTimeSet = Task.NO_DEADLINE;
+
+    private TaskDbHelper db;
 
 
     private void createCustomActionBar(String activityTitle)
@@ -82,7 +85,7 @@ public class AddEditTask extends AppCompatActivity
         createEventCheckBox.setEnabled(false);
         resetDeadlineButton.setEnabled(false);
 
-
+        db = new TaskDbHelper(this);
 
         settings = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         editor = settings.edit();
@@ -154,8 +157,7 @@ public class AddEditTask extends AppCompatActivity
 
             Log.d("addCall", String.valueOf(c.get(Calendar.DAY_OF_YEAR)));
 
-            MainActivity.db.addTask(newTask);
-            MainActivity.taskItems.add(newTask);
+            db.addTask(newTask);
 
             if (newTask.getTimeIsSet() != Task.NO_DEADLINE) createCalendarEvent(newTask);
 

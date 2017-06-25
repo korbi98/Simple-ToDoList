@@ -28,6 +28,7 @@
             android:name="com.korbi.todolist.ui.AddEditTask"
             android:label="@string/add_task_activity_title"
             android:screenOrientation="portrait"/>
+
         <activity
             android:name="com.korbi.todolist.ui.AboutTheApp"
             android:label="@string/about"
