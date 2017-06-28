@@ -392,6 +392,8 @@ public class AddEditTask extends AppCompatActivity
                 String regex = "\\s*\\bimportant\\b\\s*";
                 selectPriority.setProgress(Task.PRIORITY_HIGH);
                 resultSpeech = resultSpeech.replaceFirst(regex, "");
+                regex = "\\s*\\bwichtig\\b\\s*";
+                resultSpeech = resultSpeech.replaceFirst(regex, "");
             }
             newTaskEntry.setText(resultSpeech);
         }
