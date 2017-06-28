@@ -44,6 +44,8 @@
     <string name="tomorow">tomorrow</string>
     <string name="sourcecode">Sourcecode:</string>
     <string name="github_link" translatable="false">www.github.com/korbi98/ToDoList/tree/master</string>
+    <string name="speech_to_task_text">What\'s your new task?</string>
+    <string name="speech_command_important">important</string>
 
     <string-array name="default_priority">
 

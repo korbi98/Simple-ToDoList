@@ -44,4 +44,6 @@
         <item>Hoch</item>
         <item>Zuletzt verwendete</item>
     </string-array>
+    <string name="speech_to_task_text">Was musst du erledigen?</string>
+    <string name="speech_command_important">wichtig</string>
 </resources>

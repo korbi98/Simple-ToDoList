@@ -8,16 +8,35 @@
     android:orientation="vertical"
     tools:context="com.korbi.todolist.ui.AddEditTask">
 
-    <EditText
-        android:id="@+id/NewTaskName"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:ems="10"
-        android:hint="@string/new_task_hint"
-        android:inputType="text"
-        android:selectAllOnFocus="true"/>
+        android:layout_marginTop="5dp">
+
+        <ImageButton
+            android:id="@+id/speech_to_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="-5dp"
+            android:background="?android:attr/selectableItemBackground"
+            app:srcCompat="@android:drawable/ic_btn_speak_now"
+            android:onClick="speechToTask"/>
+
+        <EditText
+            android:id="@+id/NewTaskName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/new_task_hint"
+            android:layout_toLeftOf="@id/speech_to_task"
+            android:inputType="text"
+            android:selectAllOnFocus="true"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

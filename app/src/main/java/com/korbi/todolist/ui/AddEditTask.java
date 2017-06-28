@@ -3,11 +3,13 @@ package com.korbi.todolist.ui;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.appwidget.AppWidgetManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.provider.CalendarContract;
+import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,8 +29,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import com.korbi.todolist.database.TaskDbHelper;
 import com.korbi.todolist.logic.Task;
@@ -53,6 +58,7 @@ public class AddEditTask extends AppCompatActivity
 
     private int position;
     private int isDateOrTimeSet = Task.NO_DEADLINE;
+    final int REQUEST_CODE = 1;
 
     private TaskDbHelper db;
 
@@ -348,6 +354,46 @@ public class AddEditTask extends AppCompatActivity
             Log.d("prefill", String.valueOf(c.get(Calendar.DAY_OF_YEAR)));
             isDateOrTimeSet = MainActivity.taskItems.get(position).getTimeIsSet();
             updateDeadlineSection();
+        }
+    }
+
+    public void speechToTask(View v)
+    {
+        String DIALOG_TEXT = getString(R.string.speech_to_task_text);
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_to_task_text));
+
+        try {
+            startActivityForResult(intent, REQUEST_CODE);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(),
+                    "error",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent)
+    {
+        String resultSpeech = "";
+        super.onActivityResult(requestCode, resultCode, intent);
+        ArrayList<String> speech;
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE)
+        {
+            speech = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            resultSpeech = speech.get(0);
+
+            if(resultSpeech.contains(getString(R.string.speech_command_important)))
+            {
+                String regex = "\\s*\\bimportant\\b\\s*";
+                selectPriority.setProgress(Task.PRIORITY_HIGH);
+                resultSpeech = resultSpeech.replaceFirst(regex, "");
+            }
+            newTaskEntry.setText(resultSpeech);
         }
     }
 
