@@ -47,6 +47,9 @@
     <string name="speech_to_task_text">What\'s your new task?</string>
     <string name="speech_command_important">important</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string-array name="default_priority">
 
         <item>Low</item>
