@@ -24,10 +24,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,16 +44,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
-//TODO create own Icon
-// TODO maybe change widget to just textviews in LinearLayout instead of listview
+
 {
     public static TaskDbHelper db;
     public static List<Task> taskItems;
     public static List<Task> undoTaskItems;
+    public static List<String> categories;
     public  ToDoListRecyclerAdapter adapter;
     public RecyclerView rv;
     private TextView emptylist;
     private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    private String currentCategory;
 
     public static SharedPreferences settings;
     public Snackbar undoDeleteSnack;
@@ -58,42 +64,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
         super.onCreate(savedInstanceState);
 
         settings = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
 
+
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
         db = new TaskDbHelper(this);
+        categories = db.getAllCategories();
 
-        taskItems = db.getAllTasks();
+        setCurrentCategory(settings.getString(Settings.CURRENT_CATEGORY, categories.get(0)));
 
         emptylist = (TextView) findViewById(R.id.emptylistMessage);
 
-        checkIfToShowEmptyListView();
-
         undoTaskItems = new ArrayList<>();
-        adapter = new ToDoListRecyclerAdapter(taskItems, getApplicationContext());
-        adapter.sort();
 
         rv = (RecyclerView) findViewById(R.id.TaskRecyclerView);
-        rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setHasFixedSize(true);
         rv.setItemAnimator(new ToDoListAnimator());
 
         setUpItemSwipe();
+        setUpSnackbar();
+        setUpNavView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -101,43 +98,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View view) {
 
                 Intent OpenAddTask = new Intent(MainActivity.this, AddEditTask.class);
+                OpenAddTask.putExtra(Settings.CURRENT_CATEGORY, currentCategory);
                 startActivity(OpenAddTask);
-            }
-        });
-
-
-        undoDeleteSnack = Snackbar
-                .make(findViewById(R.id.coordinatorlayout), "", Snackbar.LENGTH_LONG)
-                .setAction(R.string.undo_delete, new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        Toast.makeText(getApplicationContext(), getString(R.string.undo_pressed), Toast.LENGTH_LONG).show();
-                        for (Task t : undoTaskItems)
-                        {
-                            taskItems.add(t);
-                        }
-                        adapter.sort();
-                        adapter.notifyItemInserted(0);//fixes strange
-                        adapter.notifyItemRangeChanged(0, taskItems.size());
-                        undoTaskItems.clear();
-                    }
-                });
-        undoDeleteSnack.setActionTextColor(Color.YELLOW);
-        undoDeleteSnack.addCallback(new Snackbar.Callback()
-        {
-
-            @Override
-            public void onDismissed(Snackbar snackbar, int event)
-            {
-                for (Task t : undoTaskItems)
-                {
-                    db.deleteTask(t.getId());
-                    updateWidget();
-                    checkIfToShowEmptyListView();
-                }
-                undoTaskItems.clear();
             }
         });
 
@@ -155,10 +117,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume()
     {
-        super.onResume();
-
-        if(taskItems.size() == 0) emptylist.setVisibility(View.VISIBLE);
-        else emptylist.setVisibility(View.GONE);
 
         if (settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false))
         {
@@ -168,33 +126,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-        /* Normally it should be enough to call sort() and notifydatasetchanged() but then tasks with no deadline get sometimes shown above ones with deadline
-         * I don't understand why, but reloading the tasks from the db and resetting the adapter solves this*/
+        updateView();
 
-        taskItems = db.getAllTasks();
-        adapter = new ToDoListRecyclerAdapter(taskItems, getApplicationContext());
-        adapter.sort();
-
-        rv.setAdapter(adapter);
         updateWidget();
+        super.onResume();
     }
 
     @Override
-    public void onStop()
-    {
+    public void onStop() {
         updateWidget();
+        checkIfToShowEmptyListView();
         super.onStop();
-        if(taskItems.size() == 0) emptylist.setVisibility(View.VISIBLE);
-        else emptylist.setVisibility(View.GONE);
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         updateWidget();
+        checkIfToShowEmptyListView();
         super.onPause();
-        if(taskItems.size() == 0) emptylist.setVisibility(View.VISIBLE);
-        else emptylist.setVisibility(View.GONE);
     }
 
     @Override
@@ -218,7 +167,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.clear_completed_tasks:
 
-                createConfirmDialogue();
+                if (db.getUncompletedTasks().size() != taskItems.size() && taskItems.size() != 0)
+                    createConfirmDialogue();
+
+                else
+                    Toast.makeText(getApplicationContext(), getString(R.string.nothing_to_delete),
+                                    Toast.LENGTH_LONG).show();
 
                 return true;
 
@@ -369,20 +323,242 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void checkIfToShowEmptyListView()
-    {
+    private void checkIfToShowEmptyListView() {
         if(taskItems.size() == 0) emptylist.setVisibility(View.VISIBLE);
         else emptylist.setVisibility(View.GONE);
     }
+
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        if (id == R.id.add_new_category) createAddEditCategoryDialogue(null);
+        else if (id == R.id.edit_categories) createChooseCategoryDialogue();
+        else
+        {
+            navigationView.setCheckedItem(item.getItemId());
+            setCurrentCategory(item.getTitle().toString());
+            settings.edit().putString(Settings.CURRENT_CATEGORY, currentCategory).apply();
+            updateView();
+        }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    private void createAddEditCategoryDialogue(final String oldCategory)
+    {
+        LayoutInflater li = LayoutInflater.from(MainActivity.this);
+        View dialogueView = li.inflate(R.layout.add_edit_category_dialogue, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setView(dialogueView);
+
+        final EditText newCategoryName = (EditText) dialogueView.findViewById(R.id.edit_dialog_input);
+
+        if (oldCategory != null) newCategoryName.setText(oldCategory);
+
+        alertDialogBuilder.setCancelable(true)
+                .setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+
+                        String categoryName = newCategoryName.getText().toString();
+                        if (categoryName.trim().length() > 0)
+                        {
+                            if (oldCategory != null)
+                            {
+                                db.updateCategory(oldCategory, categoryName);
+                                categories.get(categories.indexOf(oldCategory))
+                                        .replace(oldCategory, categoryName);
+                                navigationView.getMenu().findItem(categories.indexOf(oldCategory))
+                                        .setTitle(categoryName);
+                            }
+                            else
+                            {
+                                createCategoryEntry(categoryName);
+                                db.addCategory(categoryName);
+                                categories.add(categoryName);
+                                setCurrentCategory(categoryName);
+                                updateView();
+                            }
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.empty_category_name_error),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                })
+
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void createChooseCategoryDialogue()
+    {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+
+        String[] categoryArray = new String[categories.size()];
+        categoryArray = categories.toArray(categoryArray);
+
+        alertDialogBuilder.setSingleChoiceItems(categoryArray, -1, null);
+
+        alertDialogBuilder.setCancelable(true)
+                .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int position = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                        createCategoryDeleteConfirmDialogue(db.getAllCategories().get(position));
+                    }
+                })
+                .setNegativeButton(getString(R.string.edit), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int position = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                        createAddEditCategoryDialogue(
+                                categories.get(position)
+                        );
+                    }
+                })
+                .setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void createCategoryDeleteConfirmDialogue(final String category)
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setCancelable(true)
+                .setTitle(getString(R.string.category_delete_confirm_dialogue))
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setCurrentCategory(categories.get(0));
+                        settings.edit().putString(Settings.CURRENT_CATEGORY, currentCategory).apply();
+                        updateView();
+
+                        db.deleteCategory(category);
+                        final Menu menu = navigationView.getMenu();
+                        menu.removeItem(categories.indexOf(category));
+                        categories.remove(category);
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void createCategoryEntry(String categoryName)
+    {
+        final Menu menu = navigationView.getMenu();
+        menu.add(R.id.nav_view_items, categories.indexOf(categoryName), Menu.FLAG_APPEND_TO_GROUP, categoryName);
+        menu.findItem(categories.indexOf(categoryName)).setCheckable(true);
+    }
+
+
+    private void setUpNavView()
+    {
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        for (String s : categories)
+        {
+            createCategoryEntry(s);
+        }
+        navigationView.setCheckedItem(categories.indexOf(currentCategory));
+    }
+
+    private void setUpSnackbar()
+    {
+        undoDeleteSnack = Snackbar
+                .make(findViewById(R.id.coordinatorlayout), "", Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo_delete, new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        Toast.makeText(getApplicationContext(), getString(R.string.undo_pressed), Toast.LENGTH_LONG).show();
+                        for (Task t : undoTaskItems)
+                        {
+                            taskItems.add(t);
+                        }
+                        adapter.sort();
+                        adapter.notifyItemInserted(0);//fixes strange
+                        adapter.notifyItemRangeChanged(0, taskItems.size());
+                        undoTaskItems.clear();
+                    }
+                });
+        undoDeleteSnack.setActionTextColor(Color.YELLOW);
+        undoDeleteSnack.addCallback(new Snackbar.Callback()
+        {
+
+            @Override
+            public void onDismissed(Snackbar snackbar, int event)
+            {
+                for (Task t : undoTaskItems)
+                {
+                    db.deleteTask(t.getId());
+                    updateWidget();
+                    checkIfToShowEmptyListView();
+                }
+                undoTaskItems.clear();
+            }
+        });
+    }
+
+    public void updateView()
+    {
+        taskItems = db.getTasksByCategory(currentCategory);
+        adapter = new ToDoListRecyclerAdapter(taskItems, getApplicationContext());
+        rv.setAdapter(adapter);
+        adapter.sort();
+
+        checkIfToShowEmptyListView();
+    }
+
+    private void setCurrentCategory(String currentCategory)
+    {
+        if (categories.contains(currentCategory) == true)
+        {
+            this.currentCategory = currentCategory;
+        }
+        else this.currentCategory = categories.get(0);
+    }
 }
+
+

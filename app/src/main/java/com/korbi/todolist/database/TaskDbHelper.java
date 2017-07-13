@@ -24,7 +24,7 @@ import java.util.Date;
 public class TaskDbHelper extends SQLiteOpenHelper
 {
     private static final String DB_NAME = "TaskDataBase.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     private static final String TASK_TABLE = "tasks";
     private static final String COL_ID = "_id";
@@ -33,6 +33,9 @@ public class TaskDbHelper extends SQLiteOpenHelper
     private static final String COL_DEADLINE = "deadline";
     private static final String COL_PRIORITY = "priority";
     private static final String COL_TIME_IS_SET = "time_is_set";
+
+    private static final String CATEGORY_TABLE = "categories";
+    private static final String COL_CATEGORY = "category";
 
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -44,17 +47,42 @@ public class TaskDbHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        String createTable = "CREATE TABLE " + TASK_TABLE + " ( " + COL_ID + " INTEGER PRIMARY KEY, "
+        String createTaskTable = "CREATE TABLE " + TASK_TABLE + " ( " + COL_ID + " INTEGER PRIMARY KEY, "
                 + COL_TASK + " TEXT, " + COL_DEADLINE + " TEXT, " + COL_PRIORITY + " INTEGER, "
                 + COL_DONE + " INTEGER NOT NULL, " + COL_TIME_IS_SET + " INTEGER NOT NULL)";
 
-        db.execSQL(createTable);
+        db.execSQL(createTaskTable);
+
+        db.execSQL("ALTER TABLE " + TASK_TABLE + " ADD COLUMN " + COL_CATEGORY + " INTEGER NOT NULL DEFAULT 1");
+
+        String createCategoryTable = "CREATE TABLE " + CATEGORY_TABLE + " ( " + COL_ID + " INTEGER " +
+                "PRIMARY KEY, " + COL_CATEGORY + " STRING)";
+
+        db.execSQL(createCategoryTable);
+
+        ContentValues values = new ContentValues();
+        values.put(COL_CATEGORY, "MyTasks");//TODO add german value
+        db.insert(CATEGORY_TABLE, null, values);
     }
 
+    @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        db.execSQL("DROP TABLE IF EXISTS " + TASK_TABLE);
-        onCreate(db);
+        switch (newVersion)
+        {
+            case 2:
+                db.execSQL("ALTER TABLE " + TASK_TABLE + " ADD COLUMN " + COL_CATEGORY + " INTEGER NOT NULL DEFAULT 1");
+
+                String createCategoryTable = "CREATE TABLE " + CATEGORY_TABLE + " ( " + COL_ID + " INTEGER " +
+                        "PRIMARY KEY, " + COL_CATEGORY + " STRING)";
+
+                db.execSQL(createCategoryTable);
+
+                ContentValues values = new ContentValues();
+                values.put(COL_CATEGORY, "MyTasks");//TODO add german value
+                db.insert(CATEGORY_TABLE, null, values);
+                break;
+        }
     }
 
     public void addTask(Task task)
@@ -67,6 +95,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
         values.put(COL_DEADLINE, dateFormatter.format(task.getDeadline()));
         values.put(COL_PRIORITY, task.getPriority());
         values.put(COL_TIME_IS_SET, task.getTimeIsSet());
+        values.put(COL_CATEGORY, getCategoryId(task.getCategory()));
 
         db.insert(TASK_TABLE, null, values);
         db.close();
@@ -87,7 +116,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
             {
                 Task task = new Task(cursor.getInt(0), cursor.getString(1),
                         parseDate(cursor.getString(2)), cursor.getInt(3), cursor.getInt(4),
-                        cursor.getInt(5));
+                        cursor.getInt(5), getTaskCategory(cursor.getInt(6)));
 
                 taskList.add(task);
             } while (cursor.moveToNext());
@@ -100,7 +129,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
     {
         List<Task> taskList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + TASK_TABLE + " Where " + COL_DONE + " != 1";
+        String selectQuery = "SELECT  * FROM " + TASK_TABLE + " WHERE " + COL_DONE + " != 1";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -111,7 +140,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
             {
                 Task task = new Task(cursor.getInt(0), cursor.getString(1),
                         parseDate(cursor.getString(2)), cursor.getInt(3), cursor.getInt(4),
-                        cursor.getInt(5));
+                        cursor.getInt(5), getTaskCategory(cursor.getInt(6)));
 
                 taskList.add(task);
             } while (cursor.moveToNext());
@@ -120,21 +149,28 @@ public class TaskDbHelper extends SQLiteOpenHelper
         return taskList;
     }
 
-    public Task getTask(int id)
+    public List<Task> getTasksByCategory(String category)
     {
-        SQLiteDatabase db = this.getReadableDatabase();
+        List<Task> taskList = new ArrayList<>();
 
-        Cursor cursor = db.query(TASK_TABLE, new String[]
-                    {COL_ID, COL_TASK, COL_DONE}, COL_ID + "=?", new String[]
-                    {String.valueOf(id)}, null, null,
-                null, null);
+        String selectQuery = "SELECT * FROM " + TASK_TABLE + " WHERE " + COL_CATEGORY + "=" + getCategoryId(category);
 
-        if (cursor != null) cursor.moveToFirst();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
 
-        Task task = new Task(cursor.getInt(0), cursor.getString(1),
-                parseDate(cursor.getString(2)), cursor.getInt(3), cursor.getInt(4),
-                cursor.getInt(5));
-        return task;
+        if (cursor.moveToFirst())
+        {
+            do
+            {
+                Task task = new Task(cursor.getInt(0), cursor.getString(1),
+                        parseDate(cursor.getString(2)), cursor.getInt(3), cursor.getInt(4),
+                        cursor.getInt(5), getTaskCategory(cursor.getInt(6)));
+
+                taskList.add(task);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return taskList;
     }
 
     public int updateTask(Task task)
@@ -147,6 +183,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
         values.put(COL_PRIORITY, task.getPriority());
         values.put(COL_DEADLINE, dateFormatter.format(task.getDeadline()));
         values.put(COL_TIME_IS_SET, task.getTimeIsSet());
+        values.put(COL_CATEGORY, getCategoryId(task.getCategory()));
 
         return db.update(TASK_TABLE, values, COL_ID + " =?",
                 new String[] { String.valueOf(task.getId()) });
@@ -181,7 +218,6 @@ public class TaskDbHelper extends SQLiteOpenHelper
         try
         {
             date = dateFormatter.parse(datestring);
-            Log.d("Date", datestring + date.toString());
         }
         catch (ParseException e)
         {
@@ -190,4 +226,88 @@ public class TaskDbHelper extends SQLiteOpenHelper
 
         return date;
     }
+
+    public List<String> getAllCategories()
+    {
+        List<String> catList = new ArrayList<>();
+
+        String selectQuery = "SELECT  * FROM " + CATEGORY_TABLE;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst())
+        {
+            do
+            {
+                String category = cursor.getString(1);
+                catList.add(category);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return catList;
+    }
+
+    public void addCategory(String newCategory)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_CATEGORY, newCategory);
+
+        db.insert(CATEGORY_TABLE, null, values);
+        db.close();
+    }
+
+    public void deleteCategory(String category)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TASK_TABLE, COL_CATEGORY + " =? ",
+                new String[]{String.valueOf(getCategoryId(category))});
+
+        db.delete(CATEGORY_TABLE, COL_CATEGORY + " =? ",
+                new String[]{category});
+
+        db.close();
+    }
+
+    public int updateCategory(String category, String newCatName)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_CATEGORY, newCatName);
+
+        return db.update(CATEGORY_TABLE, values, COL_CATEGORY + " =?",
+                new String[] {category});
+    }
+
+    public int getCategoryId(String category)
+    {
+        String selectQuery = "SELECT  * FROM " + CATEGORY_TABLE + " WHERE " + COL_CATEGORY +
+                " = " + '"' + category + '"';
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor != null) cursor.moveToFirst();
+
+        if (cursor.getCount() != 0) return cursor.getInt(0);
+        else return 1;
+    }
+
+    public String getTaskCategory(int categoryID)
+    {
+        String selectQuery = "SELECT  * FROM " + CATEGORY_TABLE + " WHERE " + COL_ID +
+                " = " + categoryID;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor != null) cursor.moveToFirst();
+
+        return cursor.getString(1);
+    }
+
 }

@@ -23,6 +23,7 @@ public class Settings extends AppCompatActivity
     public static final String REMAINING_TIME_INSTEAD_OF_DATE = "dateortime";
     public static final String PREVIOUS_PRIORITY = "previouspriority";
     public static final String DEADLINE_FIRST = "deadlinefirst";
+    public static final String CURRENT_CATEGORY = "currentcategory";
 
     private CheckBox includeTimeCheckBox;
     private CheckBox setDividers;

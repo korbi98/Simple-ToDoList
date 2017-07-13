@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/nav_view_items">
+
+    </group>
+
+    <group android:checkableBehavior="none">
+
+        <item android:id="@+id/add_new_category"
+            android:title="@string/add_new_category"
+            android:orderInCategory="100"/>
+
+        <item android:id="@+id/edit_categories"
+            android:title="@string/edit_categories"
+            android:orderInCategory="101"/>
 
     </group>
 

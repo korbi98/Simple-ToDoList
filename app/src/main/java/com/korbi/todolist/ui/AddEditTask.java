@@ -34,6 +34,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import com.korbi.todolist.database.TaskDbHelper;
 import com.korbi.todolist.logic.Task;
@@ -59,6 +61,7 @@ public class AddEditTask extends AppCompatActivity
     private int position;
     private int isDateOrTimeSet = Task.NO_DEADLINE;
     final int REQUEST_CODE = 1;
+    private String currentCategory;
 
     private TaskDbHelper db;
 
@@ -83,6 +86,8 @@ public class AddEditTask extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_task);
 
+        Bundle bundle = getIntent().getExtras();
+
         createEventCheckBox = (CheckBox) findViewById(R.id.CreateEventCheckBox);
         newTaskEntry = (EditText) findViewById(R.id.NewTaskName);
         deadlineLabel = (TextView) findViewById(R.id.DeadlineTextView);
@@ -92,6 +97,7 @@ public class AddEditTask extends AppCompatActivity
         resetDeadlineButton.setEnabled(false);
 
         db = new TaskDbHelper(this);
+        currentCategory = bundle.getString(Settings.CURRENT_CATEGORY, MainActivity.categories.get(0));
 
         settings = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         editor = settings.edit();
@@ -159,9 +165,7 @@ public class AddEditTask extends AppCompatActivity
             if (c.get(Calendar.YEAR) < 100) c.set(Calendar.YEAR, 2200);
 
             Task newTask = new Task(id, newTaskEntry.getText().toString(),
-                    c.getTime(), selectPriority.getProgress(), 0, isDateOrTimeSet);
-
-            Log.d("addCall", String.valueOf(c.get(Calendar.DAY_OF_YEAR)));
+                    c.getTime(), selectPriority.getProgress(), 0, isDateOrTimeSet, currentCategory);
 
             db.addTask(newTask);
 

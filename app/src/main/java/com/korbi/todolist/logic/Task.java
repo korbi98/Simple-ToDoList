@@ -14,6 +14,7 @@ public class Task
     private Date deadline;
     private int priority;
     private int timeIsSet;
+    private String category;
 
     public static final int PRIORITY_LOW = 0;
     public static final int PRIORITY_NORMAL = 1;
@@ -23,7 +24,7 @@ public class Task
     public static final int JUST_DATE = 1;
     public static final int DATE_AND_TIME = 2;
 
-    public Task(int id, String taskname, Date deadline, int priority, int isDone, int timeIsSet)
+    public Task(int id, String taskname, Date deadline, int priority, int isDone, int timeIsSet, String category)
     {
         this.id = id;
         this.taskname = taskname;
@@ -31,6 +32,7 @@ public class Task
         this.priority = priority;
         this.isDone = isDone;
         this.timeIsSet = timeIsSet;
+        this.category = category;
     }
 
     public int getState()
@@ -91,5 +93,15 @@ public class Task
     public void setTimeIsSet(int timeIsSet)
     {
         this.timeIsSet = timeIsSet;
+    }
+
+    public String getCategory()
+    {
+        return category;
+    }
+
+    public void setCategory(String category)
+    {
+        this.category = category;
     }
 }

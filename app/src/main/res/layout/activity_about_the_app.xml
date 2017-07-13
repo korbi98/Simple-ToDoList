@@ -58,8 +58,8 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:paddingBottom="15dp"
             android:text="@string/app_info" />
 
@@ -67,24 +67,18 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:text="@string/sourcecode"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"/>
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="@string/github_link"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
             android:paddingBottom="15dp"
             android:autoLink="web"/>
+
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
             android:text="@string/contact_me"
             android:autoLink="email"/>
 

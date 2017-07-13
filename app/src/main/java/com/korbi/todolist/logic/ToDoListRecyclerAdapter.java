@@ -97,7 +97,7 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
         task = tasks.get(position);
         int taskYear = Integer.parseInt(yearOnly.format(task.getDeadline()));
 
-        h.task_name.setText(task.getTaskname());
+        h.task_name.setText(task.getTaskname() + task.getCategory());
 
         if((task.getState() != 0))
         {

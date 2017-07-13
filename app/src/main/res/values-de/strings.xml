@@ -36,7 +36,7 @@
     <string name="undo_pressed">wird rückgängig gemacht</string>
     <string name="deadline_before_priority">Aufgaben werden erst nach Datum und dann nach Wichtigkeit sortiert</string>
     <string name="tomorow">Morgen</string>
-    <string name="sourcecode">Quellcode:</string>
+    <string name="sourcecode">"Quellcode: www.github.com/korbi98/ToDoList/"</string>
 
     <string-array name="default_priority">
         <item>Niedrig</item>
@@ -46,4 +46,15 @@
     </string-array>
     <string name="speech_to_task_text">Was musst du erledigen?</string>
     <string name="speech_command_important">wichtig</string>
+    <string name="nothing_to_delete">Es gibt nichts zu löschen</string>
+    <string name="add_new_category">Kategorie hinzufügen</string>
+    <string name="edit_categories">Kategorien bearbeiten</string>
+    <string name="choose_category">Kategorie wählen:</string>
+    <string name="edit">Ändern</string>
+    <string name="delete">Löschen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="save">Speichern</string>
+    <string name="category_delete_confirm_dialogue">Willst du die Kategorie wirklich löschen?</string>
+    <string name="empty_category_name_error">Der Name der Kategorie ist leer!</string>
+
 </resources>

@@ -42,13 +42,22 @@
     <string name="undo_pressed">UNDO pressed</string>
     <string name="deadline_before_priority">Tasks get sorted by deadline first and then by priority</string>
     <string name="tomorow">tomorrow</string>
-    <string name="sourcecode">Sourcecode:</string>
-    <string name="github_link" translatable="false">www.github.com/korbi98/ToDoList/tree/master</string>
+    <string name="sourcecode">Sourcecode: www.github.com/korbi98/ToDoList/</string>
     <string name="speech_to_task_text">What\'s your new task?</string>
     <string name="speech_command_important">important</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="add_new_category">Add a new category</string>
+    <string name="nothing_to_delete">There is nothing to delete</string>
+    <string name="edit_categories">Edit categories</string>
+    <string name="choose_category">Choose category:</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="category_delete_confirm_dialogue">Are you sure?</string>
+    <string name="empty_category_name_error">The name of the category cannot be empty!</string>
 
     <string-array name="default_priority">
 
