@@ -58,6 +58,7 @@
     <string name="save">Save</string>
     <string name="category_delete_confirm_dialogue">Are you sure?</string>
     <string name="empty_category_name_error">The name of the category cannot be empty!</string>
+    <string name="category_already_exists">A category with this name exists already</string>
 
     <string-array name="default_priority">
 

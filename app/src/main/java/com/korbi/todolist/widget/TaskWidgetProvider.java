@@ -1,12 +1,13 @@
 package com.korbi.todolist.widget;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -26,7 +27,10 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
     private static TaskDbHelper db;
     private List<Task> tasks;
     private Context context;
+    private Bundle bundle;
     SharedPreferences settings;
+    private int widgetID;
+
 
     private SimpleDateFormat yearOnly = new SimpleDateFormat(("yyyy"));
     private SimpleDateFormat showFullDate = new SimpleDateFormat(("dd.MM.yy"));
@@ -36,6 +40,7 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
     {
         this.context = context;
         settings = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        bundle = intent.getExtras();
 
     }
 
@@ -43,8 +48,9 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onCreate()
     {
+        widgetID = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
         db = new TaskDbHelper(context);
-        tasks = db.getUncompletedTasks();
+        tasks = db.getUncompletedTasksByCategory(settings.getString(Settings.WIDGET_CATEGORY + String.valueOf(widgetID), db.getTaskCategory(1)));
     }
 
     @Override
@@ -113,7 +119,7 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onDataSetChanged()
     {
-        tasks = db.getUncompletedTasks();
+        tasks = db.getUncompletedTasksByCategory(settings.getString(Settings.WIDGET_CATEGORY + String.valueOf(widgetID), db.getTaskCategory(1)));
         sort();
     }
 
@@ -180,8 +186,6 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
         int remainingTime = taskCal.get(Calendar.HOUR_OF_DAY) - currentCal.get(Calendar.HOUR_OF_DAY);
 
         String deadlineStr = "";
-
-        Log.d("isDedlineSet", String.valueOf(task.getTimeIsSet()));
 
         if (deadlineIsSet && !showRemainingTime)
         {

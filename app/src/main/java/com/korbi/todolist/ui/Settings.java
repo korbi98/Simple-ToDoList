@@ -24,6 +24,7 @@ public class Settings extends AppCompatActivity
     public static final String PREVIOUS_PRIORITY = "previouspriority";
     public static final String DEADLINE_FIRST = "deadlinefirst";
     public static final String CURRENT_CATEGORY = "currentcategory";
+    public static final String WIDGET_CATEGORY = "widgetcategory";
 
     private CheckBox includeTimeCheckBox;
     private CheckBox setDividers;

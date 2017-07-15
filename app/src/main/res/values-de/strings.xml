@@ -56,5 +56,6 @@
     <string name="save">Speichern</string>
     <string name="category_delete_confirm_dialogue">Willst du die Kategorie wirklich löschen?</string>
     <string name="empty_category_name_error">Der Name der Kategorie ist leer!</string>
+    <string name="category_already_exists">Eine Kategorie mit diesem Name gibt es bereits</string>
 
 </resources>

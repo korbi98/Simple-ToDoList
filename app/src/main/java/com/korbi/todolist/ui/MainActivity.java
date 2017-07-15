@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         db = new TaskDbHelper(this);
         categories = db.getAllCategories();
-
+        setUpNavView();
         setCurrentCategory(settings.getString(Settings.CURRENT_CATEGORY, categories.get(0)));
 
         emptylist = (TextView) findViewById(R.id.emptylistMessage);
@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setUpItemSwipe();
         setUpSnackbar();
-        setUpNavView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.clear_completed_tasks:
 
-                if (db.getUncompletedTasks().size() != taskItems.size() && taskItems.size() != 0)
+                if (db.getUncompletedTasksByCategory(currentCategory).size() != taskItems.size() && taskItems.size() != 0)
                     createConfirmDialogue();
 
                 else
@@ -340,7 +339,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         {
             navigationView.setCheckedItem(item.getItemId());
             setCurrentCategory(item.getTitle().toString());
-            settings.edit().putString(Settings.CURRENT_CATEGORY, currentCategory).apply();
             updateView();
         }
 
@@ -378,14 +376,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                         .replace(oldCategory, categoryName);
                                 navigationView.getMenu().findItem(categories.indexOf(oldCategory))
                                         .setTitle(categoryName);
+                                updateWidgetTitle(oldCategory, categoryName);
                             }
                             else
                             {
-                                createCategoryEntry(categoryName);
-                                db.addCategory(categoryName);
-                                categories.add(categoryName);
-                                setCurrentCategory(categoryName);
-                                updateView();
+                                if (!categories.contains(categoryName))
+                                {
+                                    createCategoryEntry(categoryName);
+                                    db.addCategory(categoryName);
+                                    categories.add(categoryName);
+                                    setCurrentCategory(categoryName);
+                                    updateView();
+                                    navigationView.setCheckedItem(categories.indexOf(0));//Somehow the right menu entry doesn't get selected without this!?
+                                }
+                                else Toast.makeText(getApplicationContext(), getString(R.string.category_already_exists), Toast.LENGTH_LONG).show();
+
                             }
                         }
                         else
@@ -457,7 +462,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         setCurrentCategory(categories.get(0));
-                        settings.edit().putString(Settings.CURRENT_CATEGORY, currentCategory).apply();
                         updateView();
 
                         db.deleteCategory(category);
@@ -500,7 +504,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         {
             createCategoryEntry(s);
         }
-        navigationView.setCheckedItem(categories.indexOf(currentCategory));
     }
 
     private void setUpSnackbar()
@@ -558,6 +561,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.currentCategory = currentCategory;
         }
         else this.currentCategory = categories.get(0);
+        settings.edit().putString(Settings.CURRENT_CATEGORY, currentCategory).apply();
+        navigationView.setCheckedItem(categories.indexOf(currentCategory));
+    }
+
+    private void updateWidgetTitle(String oldCategory, String newCategory)
+    {
+        int ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), ToDoListWidget.class));
+
+        for(int id : ids)
+        {
+            if (settings.getString(Settings.WIDGET_CATEGORY+String.valueOf(id), "fail").equals(oldCategory))
+            {
+                settings.edit().putString(Settings.WIDGET_CATEGORY+String.valueOf(id), newCategory).apply();
+            }
+        }
     }
 }
 

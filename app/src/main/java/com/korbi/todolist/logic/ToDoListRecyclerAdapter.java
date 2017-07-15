@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,7 +96,7 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
         task = tasks.get(position);
         int taskYear = Integer.parseInt(yearOnly.format(task.getDeadline()));
 
-        h.task_name.setText(task.getTaskname() + task.getCategory());
+        h.task_name.setText(task.getTaskname());
 
         if((task.getState() != 0))
         {
@@ -254,8 +253,6 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
     {
         for(int i = 0; i < tasks.size(); i++)
         {
-            Log.d("Tasks.size()", String.valueOf(tasks.size()));
-            Log.d("i = ", String.valueOf(i));
             if (tasks.get(i).getState() == 1)
             {
                 MainActivity.db.deleteTask(tasks.get(i).getId());

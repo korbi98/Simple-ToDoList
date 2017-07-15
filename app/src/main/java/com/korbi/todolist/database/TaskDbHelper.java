@@ -9,7 +9,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.korbi.todolist.logic.Task;
 
@@ -101,35 +100,12 @@ public class TaskDbHelper extends SQLiteOpenHelper
         db.close();
     }
 
-    public List<Task> getAllTasks()
+    public List<Task> getUncompletedTasksByCategory(String category)
     {
         List<Task> taskList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + TASK_TABLE;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst())
-        {
-            do
-            {
-                Task task = new Task(cursor.getInt(0), cursor.getString(1),
-                        parseDate(cursor.getString(2)), cursor.getInt(3), cursor.getInt(4),
-                        cursor.getInt(5), getTaskCategory(cursor.getInt(6)));
-
-                taskList.add(task);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return taskList;
-    }
-
-    public List<Task> getUncompletedTasks()
-    {
-        List<Task> taskList = new ArrayList<>();
-
-        String selectQuery = "SELECT  * FROM " + TASK_TABLE + " WHERE " + COL_DONE + " != 1";
+        String selectQuery = "SELECT  * FROM " + TASK_TABLE + " WHERE " + COL_DONE + " != 1 and "
+                + COL_CATEGORY + " = " + getCategoryId(category);
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

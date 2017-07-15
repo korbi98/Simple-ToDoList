@@ -98,6 +98,7 @@ public class AddEditTask extends AppCompatActivity
 
         db = new TaskDbHelper(this);
         currentCategory = bundle.getString(Settings.CURRENT_CATEGORY, MainActivity.categories.get(0));
+        if (currentCategory == "fail") currentCategory = db.getTaskCategory(1);
 
         settings = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         editor = settings.edit();
