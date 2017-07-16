@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.text.Html;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.korbi.todolist.ui.AddEditTask;

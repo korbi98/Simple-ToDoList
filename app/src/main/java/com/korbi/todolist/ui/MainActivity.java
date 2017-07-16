@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +63,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Snackbar undoDeleteSnack;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) //TODO today view
+            //TODO widget opens mainactivity with right category
+            //TODO rework settings
+            //TODO notifications
+
+    {
 
 
         super.onCreate(savedInstanceState);
@@ -356,6 +362,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertDialogBuilder.setView(dialogueView);
 
         final EditText newCategoryName = (EditText) dialogueView.findViewById(R.id.edit_dialog_input);
+        newCategoryName.requestFocus();
 
         if (oldCategory != null) newCategoryName.setText(oldCategory);
 
@@ -411,7 +418,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 });
 
         final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        AlertDialog dialog = alertDialogBuilder.create();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.show();
     }
 
     private void createChooseCategoryDialogue()

@@ -13,7 +13,6 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +30,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 import com.korbi.todolist.database.TaskDbHelper;
 import com.korbi.todolist.logic.Task;
@@ -197,10 +192,6 @@ public class AddEditTask extends AppCompatActivity
 
             if (MainActivity.taskItems.get(position).getTimeIsSet() != Task.NO_DEADLINE) createCalendarEvent(MainActivity.taskItems.get(position));
 
-            Log.d("cTime", String.valueOf(c.getTime()));
-            Log.d("tTime", String.valueOf(MainActivity.taskItems.get(position).getDeadline()));
-            Log.d("changeDay", String.valueOf(c.get(Calendar.DAY_OF_YEAR)));
-
             updateWidget();
             finish();
         }
@@ -356,7 +347,6 @@ public class AddEditTask extends AppCompatActivity
             newTaskEntry.setText(MainActivity.taskItems.get(position).getTaskname());
             selectPriority.setProgress(MainActivity.taskItems.get(position).getPriority());
             c.setTime(MainActivity.taskItems.get(position).getDeadline());
-            Log.d("prefill", String.valueOf(c.get(Calendar.DAY_OF_YEAR)));
             isDateOrTimeSet = MainActivity.taskItems.get(position).getTimeIsSet();
             updateDeadlineSection();
         }
