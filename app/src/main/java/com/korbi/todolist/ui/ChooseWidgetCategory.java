@@ -29,12 +29,16 @@ public class ChooseWidgetCategory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_widget_category);
-        this.setFinishOnTouchOutside(false);
+        this.setFinishOnTouchOutside(true);
+        setResult(RESULT_CANCELED);
 
         settings = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         Bundle bundle = getIntent().getExtras();
 
         widgetToChange = bundle.getInt(ToDoListWidget.APP_ID);
+        if (widgetToChange == 0) { //first setup
+            widgetToChange = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+        }
         getWidgetIdKey = Settings.WIDGET_CATEGORY + String.valueOf(widgetToChange);
 
         ListView lv = (ListView) findViewById(R.id.choose_widget_category_list);
@@ -54,6 +58,7 @@ public class ChooseWidgetCategory extends AppCompatActivity {
                 currentWidgetCategory = categories.get(position);
                 settings.edit().putString(getWidgetIdKey, currentWidgetCategory).apply();
                 updateWidget();
+                setResult(RESULT_OK);
                 finish();
             }
         });

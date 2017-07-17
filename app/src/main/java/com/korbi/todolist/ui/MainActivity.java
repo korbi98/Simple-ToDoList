@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.korbi.todolist.logic.Task;
 import com.korbi.todolist.database.TaskDbHelper;
 import com.korbi.todolist.logic.ToDoListRecyclerAdapter;
+import com.korbi.todolist.widget.TaskWidgetProvider;
 import com.korbi.todolist.widget.ToDoListWidget;
 import com.korbi.todolist.todolist.R;
 
@@ -83,7 +84,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         db = new TaskDbHelper(this);
         categories = db.getAllCategories();
         setUpNavView();
-        setCurrentCategory(settings.getString(Settings.CURRENT_CATEGORY, categories.get(0)));
+
+        Bundle bundle = getIntent().getExtras();
+
+        if(bundle != null) {
+            if (bundle.containsKey(Settings.CURRENT_CATEGORY)) {
+                setCurrentCategory(bundle.getString(Settings.CURRENT_CATEGORY)); //if app is launched through widget
+            }
+        }
+        else setCurrentCategory(settings.getString(Settings.CURRENT_CATEGORY, categories.get(0))); //if app is launched otherwise
 
         emptylist = (TextView) findViewById(R.id.emptylistMessage);
 
@@ -362,9 +371,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertDialogBuilder.setView(dialogueView);
 
         final EditText newCategoryName = (EditText) dialogueView.findViewById(R.id.edit_dialog_input);
-        newCategoryName.requestFocus();
+        final TextView dialogTitle = (TextView) dialogueView.findViewById(R.id.add_category_dialog_message);
 
-        if (oldCategory != null) newCategoryName.setText(oldCategory);
+        if (oldCategory != null){
+            newCategoryName.setText(oldCategory);
+            dialogTitle.setText(R.string.edit_category_dialog_title);
+        }
 
         alertDialogBuilder.setCancelable(true)
                 .setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener()
@@ -389,12 +401,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             {
                                 if (!categories.contains(categoryName))
                                 {
+                                    categories.add(categoryName);
                                     createCategoryEntry(categoryName);
                                     db.addCategory(categoryName);
-                                    categories.add(categoryName);
                                     setCurrentCategory(categoryName);
                                     updateView();
                                     navigationView.setCheckedItem(categories.indexOf(0));//Somehow the right menu entry doesn't get selected without this!?
+                                    navigationView.setCheckedItem(categories.indexOf(currentCategory));
                                 }
                                 else Toast.makeText(getApplicationContext(), getString(R.string.category_already_exists), Toast.LENGTH_LONG).show();
 
@@ -445,9 +458,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         int position = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-                        createAddEditCategoryDialogue(
-                                categories.get(position)
-                        );
+
+                        if(position > -1)
+                        {
+                            createAddEditCategoryDialogue(categories.get(position));
+                        }
+
                     }
                 })
                 .setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -470,13 +486,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        setCurrentCategory(categories.get(0));
-                        updateView();
 
-                        db.deleteCategory(category);
-                        final Menu menu = navigationView.getMenu();
-                        menu.removeItem(categories.indexOf(category));
-                        categories.remove(category);
+                        if(categories.size() > 1) {
+                            db.deleteCategory(category);
+                            final Menu menu = navigationView.getMenu();
+                            menu.removeItem(categories.indexOf(category));
+                            categories.remove(category);
+                            Log.d("test", categories.get(0));
+                            updateWidgetTitle(category, categories.get(0));
+                            setCurrentCategory(categories.get(0));
+                            updateView();
+                        }
+                        else
+                        {Toast.makeText(getApplicationContext(), getString(R.string.delete_last_category_error), Toast.LENGTH_LONG).show();}
                     }
                 })
                 .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -572,6 +594,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else this.currentCategory = categories.get(0);
         settings.edit().putString(Settings.CURRENT_CATEGORY, currentCategory).apply();
         navigationView.setCheckedItem(categories.indexOf(currentCategory));
+        setTitle(currentCategory);
     }
 
     private void updateWidgetTitle(String oldCategory, String newCategory)

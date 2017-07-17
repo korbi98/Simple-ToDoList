@@ -63,7 +63,13 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:label="@string/choose_category"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleInstance">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>

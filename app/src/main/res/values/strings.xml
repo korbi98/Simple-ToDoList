@@ -46,8 +46,8 @@
     <string name="speech_to_task_text">What\'s your new task?</string>
     <string name="speech_command_important">important</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="add_new_category">Add a new category</string>
     <string name="nothing_to_delete">There is nothing to delete</string>
     <string name="edit_categories">Edit categories</string>
@@ -60,6 +60,8 @@
     <string name="empty_category_name_error">The name of the category cannot be empty!</string>
     <string name="category_already_exists">A category with this name exists already</string>
     <string name="new_category_hint">New Category</string>
+    <string name="edit_category_dialog_title">Edit category</string>
+    <string name="delete_last_category_error">You cannot delete the last category!</string>
 
     <string-array name="default_priority">
 

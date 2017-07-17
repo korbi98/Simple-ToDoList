@@ -9,7 +9,7 @@
     <string name="include_time_in_deadline">Auch eine Zeit, statt nur ein Datum festlegen</string>
     <string name="priority_label">Priorität</string>
     <string name="set_deadline_label">Muss erledigt sein bis:</string>
-    <string name="default_priority_label">Standart Priorität:</string>
+    <string name="default_priority_label">Standard Priorität:</string>
 
     <string name="confirm_message">Alle beendeten Aufgaben werden gelöscht!</string>
     <string name="contact_me">Email: info@korbinian-moser.de</string>
@@ -27,7 +27,7 @@
     <string name="settings">Einstellungen</string>
     <string name="today">Heute</string>
     <string name="undo_delete">Rückgängig</string>
-    <string name="wrong_time">Die Zeit liegt in der Vergangenheit.\n Zeit wurde deshalb auf Stunde in der Zukunft gesetzt</string>
+    <string name="wrong_time">Die Zeit liegt in der Vergangenheit.\n Zeit wurde deshalb auf eine Stunde in der Zukunft gesetzt</string>
     <string name="yes">Ja</string>
     <string name="about">Über</string>
     <string name="new_task_hint">Neue Aufgabe</string>
@@ -58,5 +58,7 @@
     <string name="empty_category_name_error">Der Name der Kategorie ist leer!</string>
     <string name="category_already_exists">Eine Kategorie mit diesem Name gibt es bereits</string>
     <string name="new_category_hint">Neue Kategorie</string>
+    <string name="edit_category_dialog_title">Kategorie bearbeiten</string>
+    <string name="delete_last_category_error">Die letzte Kategorie kann nicht gelöscht werden!</string>
 
 </resources>

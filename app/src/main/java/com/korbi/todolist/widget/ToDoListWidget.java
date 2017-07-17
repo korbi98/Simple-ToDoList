@@ -27,6 +27,7 @@ public class ToDoListWidget extends AppWidgetProvider
                                 int appWidgetId)
     {
         settings = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        String title = settings.getString(Settings.WIDGET_CATEGORY+String.valueOf(appWidgetId), "ToDoList");
 
         Intent serviceIntent = new Intent(context, WidgetService.class);
         serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -36,12 +37,13 @@ public class ToDoListWidget extends AppWidgetProvider
 
         RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.to_do_list_widget);
         widget.setRemoteAdapter(R.id.widget_list, serviceIntent);
-        widget.setTextViewText(R.id.widget_title, settings.getString(Settings.WIDGET_CATEGORY+String.valueOf(appWidgetId), "ToDoList"));
+        widget.setTextViewText(R.id.widget_title, title);
 
         Intent addTask = new Intent(context, AddEditTask.class);
         Intent openMainActivity = new Intent(context, MainActivity.class);
         Intent chooseCategory = new Intent(context, ChooseWidgetCategory.class);
-        addTask.putExtra(Settings.CURRENT_CATEGORY, settings.getString(Settings.CURRENT_CATEGORY, "fail"));
+        addTask.putExtra(Settings.CURRENT_CATEGORY, title);
+        openMainActivity.putExtra(Settings.CURRENT_CATEGORY, title);
         chooseCategory.putExtra(APP_ID, appWidgetId);
 
         PendingIntent pendingAddTaskIntent = PendingIntent.getActivity(context, appWidgetId, addTask, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -50,7 +52,7 @@ public class ToDoListWidget extends AppWidgetProvider
         PendingIntent pendingChooseCategory = PendingIntent.getActivity(context,appWidgetId,chooseCategory, PendingIntent.FLAG_UPDATE_CURRENT);
         widget.setOnClickPendingIntent(R.id.widget_title, pendingChooseCategory);
 
-        PendingIntent pendingMainActivityIntent = PendingIntent.getActivity(context, 0, openMainActivity, 0);
+        PendingIntent pendingMainActivityIntent = PendingIntent.getActivity(context, appWidgetId, openMainActivity, PendingIntent.FLAG_UPDATE_CURRENT);
         widget.setOnClickPendingIntent(R.id.todoListWidget, pendingMainActivityIntent);
 
         widget.setPendingIntentTemplate(R.id.widget_list, pendingMainActivityIntent);

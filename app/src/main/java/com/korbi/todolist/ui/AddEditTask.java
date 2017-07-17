@@ -92,8 +92,8 @@ public class AddEditTask extends AppCompatActivity
         resetDeadlineButton.setEnabled(false);
 
         db = new TaskDbHelper(this);
-        currentCategory = bundle.getString(Settings.CURRENT_CATEGORY, MainActivity.categories.get(0));
-        if (currentCategory == "fail") currentCategory = db.getTaskCategory(1);
+        currentCategory = bundle.getString(Settings.CURRENT_CATEGORY, db.getTaskCategory(1));
+        if (currentCategory == null) currentCategory = db.getTaskCategory(1);
 
         settings = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         editor = settings.edit();
@@ -156,7 +156,7 @@ public class AddEditTask extends AppCompatActivity
         if (newTaskEntry.getText().toString().trim().length() > 0)
         {
 
-            int id = MainActivity.db.getLatestID() + 1;
+            int id = db.getLatestID() + 1;
 
             if (c.get(Calendar.YEAR) < 100) c.set(Calendar.YEAR, 2200);
 
