@@ -65,10 +65,6 @@
             android:excludeFromRecents="true"
             android:launchMode="singleInstance">
 
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-
         </activity>
     </application>
 
