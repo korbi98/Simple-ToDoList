@@ -64,11 +64,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Snackbar undoDeleteSnack;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) //TODO today view
-            //TODO widget opens mainactivity with right category
+    protected void onCreate(Bundle savedInstanceState)
             //TODO rework settings
-            //TODO notifications
-
+            //TODO interactive notifications
     {
 
 
@@ -137,6 +135,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             for (Task t : taskItems)
             {
                 if (t.getTimeIsSet() == Task.DATE_AND_TIME) t.setTimeIsSet(Task.JUST_DATE);
+            }
+        }
+
+        Bundle bundle = getIntent().getExtras();
+
+        if(bundle != null) {
+            if (bundle.containsKey(Settings.CURRENT_CATEGORY)) {
+                setCurrentCategory(bundle.getString(Settings.CURRENT_CATEGORY)); //if app is launched through widget
             }
         }
 
@@ -391,10 +397,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (oldCategory != null)
                             {
                                 db.updateCategory(oldCategory, categoryName);
-                                categories.get(categories.indexOf(oldCategory))
-                                        .replace(oldCategory, categoryName);
+                                //categories.get(categories.indexOf(oldCategory))
+                                  //      .replace(oldCategory, categoryName);
                                 navigationView.getMenu().findItem(categories.indexOf(oldCategory))
                                         .setTitle(categoryName);
+                                categories = db.getAllCategories();
+                                setCurrentCategory(categoryName);
                                 updateWidgetTitle(oldCategory, categoryName);
                             }
                             else
@@ -438,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void createChooseCategoryDialogue()
     {
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
 
         String[] categoryArray = new String[categories.size()];
@@ -473,7 +481,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
-        final AlertDialog alertDialog = alertDialogBuilder.create();
+        AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
 
