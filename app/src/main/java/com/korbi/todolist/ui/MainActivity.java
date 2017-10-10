@@ -138,14 +138,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-        Bundle bundle = getIntent().getExtras();
-
-        if(bundle != null) {
-            if (bundle.containsKey(Settings.CURRENT_CATEGORY)) {
-                setCurrentCategory(bundle.getString(Settings.CURRENT_CATEGORY)); //if app is launched through widget
-            }
-        }
-
         updateView();
 
         updateWidget();
