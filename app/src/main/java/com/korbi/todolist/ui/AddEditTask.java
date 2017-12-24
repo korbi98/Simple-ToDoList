@@ -71,7 +71,7 @@ public class AddEditTask extends AppCompatActivity
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(actionBarLayout);
 
-        TextView title = (TextView) findViewById(R.id.CustomActionBarTitle);
+        TextView title = findViewById(R.id.CustomActionBarTitle);
         title.setText(activityTitle);
     }
 
@@ -83,11 +83,11 @@ public class AddEditTask extends AppCompatActivity
 
         Bundle bundle = getIntent().getExtras();
 
-        createEventCheckBox = (CheckBox) findViewById(R.id.CreateEventCheckBox);
-        newTaskEntry = (EditText) findViewById(R.id.NewTaskName);
-        deadlineLabel = (TextView) findViewById(R.id.DeadlineTextView);
-        selectPriority = (SeekBar) findViewById(R.id.SelectPriority);
-        resetDeadlineButton = (Button) findViewById(R.id.resetDate);
+        createEventCheckBox = findViewById(R.id.CreateEventCheckBox);
+        newTaskEntry = findViewById(R.id.NewTaskName);
+        deadlineLabel = findViewById(R.id.DeadlineTextView);
+        selectPriority = findViewById(R.id.SelectPriority);
+        resetDeadlineButton = findViewById(R.id.resetDate);
         createEventCheckBox.setEnabled(false);
         resetDeadlineButton.setEnabled(false);
 
@@ -112,7 +112,7 @@ public class AddEditTask extends AppCompatActivity
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-                if (actionId == EditorInfo.IME_ACTION_DONE)
+                if (actionId == EditorInfo.IME_ACTION_DONE) // saves when enter is pressed
                 {
                     save(getCurrentFocus());
                     return true;
@@ -150,7 +150,7 @@ public class AddEditTask extends AppCompatActivity
         else saveNewTask();
     }
 
-    private void saveNewTask()
+    private void saveNewTask() // saves the new task
     {
 
         if (newTaskEntry.getText().toString().trim().length() > 0)
@@ -177,7 +177,7 @@ public class AddEditTask extends AppCompatActivity
         }
     }
 
-    private void saveChanges()
+    private void saveChanges() // updates the task that was edited
     {
         if (newTaskEntry.getText().toString().trim().length() > 0)
         {
@@ -316,7 +316,7 @@ public class AddEditTask extends AppCompatActivity
         }
     }
 
-    private void updateDeadlineSection()
+    private void updateDeadlineSection() // toggles whether the reset button is enabled or not
     {
         if (isDateOrTimeSet == Task.DATE_AND_TIME && settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false))
         {
@@ -338,7 +338,7 @@ public class AddEditTask extends AppCompatActivity
         }
     }
 
-    private void prefill()
+    private void prefill() //when you edit a task, this method sets the priority bar, editTextView etc. to the values of the task to edit
     {
         if (getIntent().getBooleanExtra("prefillBool", false))
         {
@@ -374,7 +374,7 @@ public class AddEditTask extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent)
     {
-        String resultSpeech = "";
+        String resultSpeech;
         super.onActivityResult(requestCode, resultCode, intent);
         ArrayList<String> speech;
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE)

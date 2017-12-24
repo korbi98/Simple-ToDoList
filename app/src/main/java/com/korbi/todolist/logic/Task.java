@@ -4,9 +4,10 @@ import java.util.Date;
 
 /**
  * Created by korbi on 12.03.17.
+ * See github for full sourcecode: github.com/korbi98/todolist
  */
 
-public class Task
+public class Task //Task object with all its attributes
 {
     private int id;
     private String taskname;

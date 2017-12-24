@@ -18,6 +18,11 @@ import com.korbi.todolist.widget.ToDoListWidget;
 
 import java.util.List;
 
+
+
+
+//this activity lets you choose the category, that a widget is displaying
+
 public class ChooseWidgetCategory extends AppCompatActivity {
 
     private SharedPreferences settings;
@@ -41,7 +46,7 @@ public class ChooseWidgetCategory extends AppCompatActivity {
         }
         getWidgetIdKey = Settings.WIDGET_CATEGORY + String.valueOf(widgetToChange);
 
-        ListView lv = (ListView) findViewById(R.id.choose_widget_category_list);
+        ListView lv = findViewById(R.id.choose_widget_category_list);
 
         TaskDbHelper db = new TaskDbHelper(this);
         final List<String> categories = db.getAllCategories();

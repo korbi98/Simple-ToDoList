@@ -9,7 +9,7 @@
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:stretchColumns="1">
 
         <ImageView
@@ -28,59 +28,69 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textAlignment="center"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/App_Version"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="16dp"
+            android:text="AppVersion"
+            android:textSize="16sp"
             android:paddingBottom="15dp"
             android:layout_gravity="center_horizontal"
-            android:textAlignment="center"/>
-
-
-            <Button
-                android:id="@+id/rateAppButton"
-                android:onClick="rateMe"
-                android:text="@string/rate_app_button"
-                android:layout_width="0dp"
-                android:textSize="12dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="80dp"
-                android:layout_marginRight="80dp"/>
-
+            android:textAlignment="center"
+            tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
             android:paddingBottom="15dp"
             android:text="@string/app_info" />
 
+        <Button
+            android:id="@+id/about_rate_app_button"
+            android:onClick="rateMe"
+            android:text="@string/rate_app_button"
+            android:layout_width="0dp"
+            android:textSize="12sp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginBottom="5dp"/>
+
+        <Button
+            android:id="@+id/about_show_my_other_apps_button"
+            android:onClick="showOtherApps"
+            android:text="@string/show_my_other_apps"
+            android:layout_width="0dp"
+            android:textSize="12sp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"/>
+
         <TextView
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp"
+            android:text="@string/contact_me"
+            android:autoLink="email"
+            android:paddingBottom="15dp"/>
+
+        <TextView
+            android:textAlignment="center"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:text="@string/sourcecode"
-            android:layout_marginRight="15dp"
-            android:layout_marginLeft="15dp"
-            android:paddingBottom="15dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp"
             android:autoLink="web"/>
-
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:layout_marginLeft="15dp"
-            android:text="@string/contact_me"
-            android:autoLink="email"/>
 
     </TableLayout>
 

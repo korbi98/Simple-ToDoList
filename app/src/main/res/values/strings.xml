@@ -8,10 +8,8 @@
     <string name="about">About</string>
     <string name="add_task_activity_title">Add or edit task</string>
 
-    <string name="app_info">A Simple, yet powerful app to manage your everyday life.
-        \nIf you like the app, please consider rating it on the Playstore and sharing
-        it with your friends.</string>
-    <string name="contact_me">Contact me: info@korbinian-moser.de</string>
+    <string name="app_info">A Simple, yet powerful app to manage your everyday life.</string>
+    <string name="contact_me">Contact:\ninfo@korbinian-moser.de</string>
     <string name="rate_app_button">Rate this App</string>
     <string name="donate_button" translatable="false">Make a small Donation</string>
     <string name="confirm_tasks" translatable="false">OK</string>
@@ -42,7 +40,7 @@
     <string name="undo_pressed">UNDO pressed</string>
     <string name="deadline_before_priority">Tasks get sorted by deadline first and then by priority</string>
     <string name="tomorow">tomorrow</string>
-    <string name="sourcecode">Sourcecode: www.github.com/korbi98/ToDoList/</string>
+    <string name="sourcecode">Sourcecode: \ngithub.com/korbi98/ToDoList/</string>
     <string name="speech_to_task_text">What\'s your new task?</string>
     <string name="speech_command_important">important</string>
 
@@ -62,6 +60,8 @@
     <string name="new_category_hint">New Category</string>
     <string name="edit_category_dialog_title">Edit category</string>
     <string name="delete_last_category_error">You cannot delete the last category!</string>
+    <string name="categories">categories</string>
+    <string name="show_my_other_apps">My other apps</string>
 
     <string-array name="default_priority">
 

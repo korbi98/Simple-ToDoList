@@ -54,9 +54,9 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
         private TaskViewHolder(View view)
         {
             super(view);
-            task_name = (TextView) itemView.findViewById(R.id.list_task_view);
-            task_deadline = (TextView) itemView.findViewById(R.id.list_deadline);
-            isDone = (CheckBox) itemView.findViewById(R.id.list_checkbox);
+            task_name = itemView.findViewById(R.id.list_task_view);
+            task_deadline = itemView.findViewById(R.id.list_deadline);
+            isDone = itemView.findViewById(R.id.list_checkbox);
             divider = itemView.findViewById(R.id.listDivider);
             priorityIndicator = itemView.findViewById(R.id.priorityIndicator);
 
@@ -145,7 +145,7 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
         return tasks.size();
     }
 
-    private void setDeadlineRemainingTime(ToDoListRecyclerAdapter.TaskViewHolder holder, int taskYear)
+    private void setDeadlineRemainingTime(ToDoListRecyclerAdapter.TaskViewHolder holder, int taskYear) //This method sets the text of the textview, that shows the deadline of the task
     {
         Calendar taskCal = Calendar.getInstance();
         Calendar currentCal = Calendar.getInstance();
@@ -164,7 +164,7 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
 
         String deadlineStr = "";
 
-        if (deadlineIsSet && !showRemainingTime)
+        if (deadlineIsSet && !showRemainingTime) // String depends whether you choose to show the date or the remaining time in the settings
         {
             if (includeTime)
             {
@@ -205,7 +205,7 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
         else if (remainingDays < 0) holder.task_deadline.setTextColor(Color.RED);
     }
 
-    public void sort()
+    public void sort() //Sorts the tasks in the right order (Priority first and then deadline)
     {
         Collections.sort(tasks, new Comparator<Task>() {
             @Override
@@ -219,7 +219,7 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
                     return sortState;
                 }
 
-                if (settings.getBoolean(Settings.DEADLINE_FIRST, false))
+                if (settings.getBoolean(Settings.DEADLINE_FIRST, false)) // deadline first and then priority
                 {
                     if (t1.getDeadline().compareTo(t2.getDeadline()) != 0)
                     {
@@ -263,7 +263,7 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
         }
     }
 
-    private void setItemColor(ToDoListRecyclerAdapter.TaskViewHolder holder)
+    private void setItemColor(ToDoListRecyclerAdapter.TaskViewHolder holder) // sets the color indicating the priority of the task
     {
         if (task.getState() == 0) {
             switch (task.getPriority()) {

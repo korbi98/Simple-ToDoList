@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         db = new TaskDbHelper(this);
@@ -92,11 +92,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else setCurrentCategory(settings.getString(Settings.CURRENT_CATEGORY, categories.get(0))); //if app is launched otherwise
 
-        emptylist = (TextView) findViewById(R.id.emptylistMessage);
+        emptylist = findViewById(R.id.emptylistMessage);
 
         undoTaskItems = new ArrayList<>();
 
-        rv = (RecyclerView) findViewById(R.id.TaskRecyclerView);
+        rv = findViewById(R.id.TaskRecyclerView);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setHasFixedSize(true);
         rv.setItemAnimator(new ToDoListAnimator());
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setUpItemSwipe();
         setUpSnackbar();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,14 +135,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             for (Task t : taskItems)
             {
                 if (t.getTimeIsSet() == Task.DATE_AND_TIME) t.setTimeIsSet(Task.JUST_DATE);
-            }
-        }
-
-        Bundle bundle = getIntent().getExtras();
-
-        if(bundle != null) {
-            if (bundle.containsKey(Settings.CURRENT_CATEGORY)) {
-                setCurrentCategory(bundle.getString(Settings.CURRENT_CATEGORY)); //if app is launched through widget
             }
         }
 
@@ -184,35 +176,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.clear_completed_tasks:
+        if (item.getItemId() == R.id.clear_completed_tasks){
 
-                if (db.getUncompletedTasksByCategory(currentCategory).size() != taskItems.size() && taskItems.size() != 0)
-                    createConfirmDialogue();
+            if (db.getUncompletedTasksByCategory(currentCategory).size() != taskItems.size() && taskItems.size() != 0)
+                createConfirmDialogue();
 
-                else
-                    Toast.makeText(getApplicationContext(), getString(R.string.nothing_to_delete),
-                                    Toast.LENGTH_LONG).show();
-
+            else
+                Toast.makeText(getApplicationContext(), getString(R.string.nothing_to_delete),
+                        Toast.LENGTH_LONG).show();
                 return true;
-
-            case R.id.about:
-
-                Intent openAboutApp = new Intent(MainActivity.this, AboutTheApp.class);
-                startActivity(openAboutApp);
-
-                return true;
-
-            case R.id.settings:
-
-                Intent openSettings = new Intent(MainActivity.this, Settings.class);
-                startActivity(openSettings);
-
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        } else return super.onOptionsItemSelected(item);
 
     }
 
@@ -239,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }).show();
     }
 
-    private void setUpItemSwipe()
+    private void setUpItemSwipe() //handles the swipe to delete feature
     {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.
                 SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -330,32 +303,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sendBroadcast(intent);
     }
 
-    private void setDeleteSnackbarText()
-    {
-        if (undoTaskItems.size() == 1)
-        {
+    private void setDeleteSnackbarText() {
+        if (undoTaskItems.size() == 1) {
             undoDeleteSnack.setText(R.string.one_task_deleted);
         }
-        else
-        {
-            undoDeleteSnack.setText(String.format(getString(R.string.multiple_tasks_deleted),
-                                                            undoTaskItems.size()));
+        else {
+            undoDeleteSnack.setText(String.format(getString(R.string.multiple_tasks_deleted), undoTaskItems.size()));
         }
     }
 
-    private void checkIfToShowEmptyListView() {
+    private void checkIfToShowEmptyListView() { // shows the hint when tasklist is empty
         if(taskItems.size() == 0) emptylist.setVisibility(View.VISIBLE);
         else emptylist.setVisibility(View.GONE);
     }
 
-
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.add_new_category) createAddEditCategoryDialogue(null);
         else if (id == R.id.edit_categories) createChooseCategoryDialogue();
+        else if (id == R.id.settings){
+            Intent openSettings = new Intent(MainActivity.this, Settings.class);
+            startActivity(openSettings);
+        } else if (id == R.id.about){
+            Intent openAboutApp = new Intent(MainActivity.this, AboutTheApp.class);
+            startActivity(openAboutApp);
+        }
+
         else
         {
             navigationView.setCheckedItem(item.getItemId());
@@ -376,8 +352,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         alertDialogBuilder.setView(dialogueView);
 
-        final EditText newCategoryName = (EditText) dialogueView.findViewById(R.id.edit_dialog_input);
-        final TextView dialogTitle = (TextView) dialogueView.findViewById(R.id.add_category_dialog_message);
+        final EditText newCategoryName = dialogueView.findViewById(R.id.edit_dialog_input);
+        final TextView dialogTitle = dialogueView.findViewById(R.id.add_category_dialog_message);
 
         if (oldCategory != null){
             newCategoryName.setText(oldCategory);
@@ -438,7 +414,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
-        final AlertDialog alertDialog = alertDialogBuilder.create();
         AlertDialog dialog = alertDialogBuilder.create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
@@ -527,16 +502,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menu.findItem(categories.indexOf(categoryName)).setCheckable(true);
     }
 
-
     private void setUpNavView()
     {
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         for (String s : categories)
@@ -595,7 +569,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setCurrentCategory(String currentCategory)
     {
-        if (categories.contains(currentCategory) == true)
+        if (categories.contains(currentCategory))
         {
             this.currentCategory = currentCategory;
         }

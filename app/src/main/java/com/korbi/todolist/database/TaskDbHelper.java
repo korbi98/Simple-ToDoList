@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 
-
-
 public class TaskDbHelper extends SQLiteOpenHelper
 {
     private static final String DB_NAME = "TaskDataBase.db";
@@ -65,7 +63,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) //This method ensures that there are no compatibility problems if you update from an older version of the app
     {
         switch (newVersion)
         {
@@ -187,7 +185,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
         return latestID;
     }
 
-    private Date parseDate(String datestring)
+    private Date parseDate(String datestring) //converts the string that stores the date in the database to a date object
     {
         Date date = null;
 
@@ -259,7 +257,7 @@ public class TaskDbHelper extends SQLiteOpenHelper
                 new String[] {category});
     }
 
-    public int getCategoryId(String category)
+    private int getCategoryId(String category)
     {
         String selectQuery = "SELECT  * FROM " + CATEGORY_TABLE + " WHERE " + COL_CATEGORY +
                 " = " + '"' + category + '"';

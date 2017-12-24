@@ -12,7 +12,7 @@
     <string name="default_priority_label">Standard Priorität:</string>
 
     <string name="confirm_message">Alle beendeten Aufgaben werden gelöscht!</string>
-    <string name="contact_me">Email: info@korbinian-moser.de</string>
+    <string name="contact_me">Kontakt:\ninfo@korbinian-moser.de</string>
     <string name="empty_list">Tippe auf den + Button für neue Aufgaben\nWische nach Links um Aufgaben zu löschen</string>
     <string name="high">Hoch</string>
     <string name="low">Niedrig</string>
@@ -31,12 +31,11 @@
     <string name="yes">Ja</string>
     <string name="about">Über</string>
     <string name="new_task_hint">Neue Aufgabe</string>
-    <string name="app_info">Eine einfache und leistungsstarke App um den Alltag zu meistern.
-        \nWenn dir die App gefällt, wäre es schön wenn du eine Bewertung abgeben und sie mit deinen Freunden teilen würdest.</string>
+    <string name="app_info">Eine einfache und leistungsstarke App um den Alltag zu meistern.</string>
     <string name="undo_pressed">wird rückgängig gemacht</string>
     <string name="deadline_before_priority">Aufgaben werden erst nach Datum und dann nach Wichtigkeit sortiert</string>
     <string name="tomorow">Morgen</string>
-    <string name="sourcecode">"Quellcode: www.github.com/korbi98/ToDoList/"</string>
+    <string name="sourcecode">Quellcode:\ngithub.com/korbi98/ToDoList/</string>
 
     <string-array name="default_priority">
         <item>Niedrig</item>
@@ -60,5 +59,6 @@
     <string name="new_category_hint">Neue Kategorie</string>
     <string name="edit_category_dialog_title">Kategorie bearbeiten</string>
     <string name="delete_last_category_error">Die letzte Kategorie kann nicht gelöscht werden!</string>
+    <string name="categories">Kategorien</string>
 
 </resources>

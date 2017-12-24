@@ -43,11 +43,11 @@ public class Settings extends AppCompatActivity
 
         editor = settings.edit();
 
-        includeTimeCheckBox = (CheckBox) findViewById(R.id.IncludeTimeInDeadline);
-        setDividers = (CheckBox) findViewById(R.id.setDividersCheckbox);
-        dateOrTime = (CheckBox) findViewById(R.id.dateOrTimeCheckbox);
-        deadlineFirst = (CheckBox) findViewById(R.id.deadline_before_priority);
-        defaultPriority = (Spinner) findViewById(R.id.defaultPrioritySpinner);
+        includeTimeCheckBox = findViewById(R.id.IncludeTimeInDeadline);
+        setDividers = findViewById(R.id.setDividersCheckbox);
+        dateOrTime = findViewById(R.id.dateOrTimeCheckbox);
+        deadlineFirst = findViewById(R.id.deadline_before_priority);
+        defaultPriority = findViewById(R.id.defaultPrioritySpinner);
 
         includeTimeCheckBox.setChecked(settings.getBoolean(INCLUDE_TIME_SETTING, false));
         setDividers.setChecked(settings.getBoolean(NO_DIVIDERS, false));

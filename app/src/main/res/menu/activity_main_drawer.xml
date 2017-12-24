@@ -3,7 +3,6 @@
 
     <group android:checkableBehavior="single"
         android:id="@+id/nav_view_items">
-
     </group>
 
     <group android:checkableBehavior="none">
@@ -16,6 +15,19 @@
             android:title="@string/edit_categories"
             android:orderInCategory="101"/>
 
+    </group>
+
+    <group android:checkableBehavior="none"
+        android:id="@+id/settings_group">
+        <item
+            android:id="@+id/settings"
+            android:title="@string/settings"
+            android:orderInCategory="102"/>
+
+        <item
+            android:id="@+id/about"
+            android:title="@string/about"
+            android:orderInCategory="103"/>
     </group>
 
 </menu>

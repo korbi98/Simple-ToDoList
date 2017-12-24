@@ -1,5 +1,6 @@
 package com.korbi.todolist.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,12 +18,13 @@ public class AboutTheApp extends AppCompatActivity {
 
     TextView appversion;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_the_app);
 
-        appversion = (TextView) findViewById(R.id.App_Version);
+        appversion = findViewById(R.id.App_Version);
 
         PackageInfo pInfo = null;
         try {
@@ -31,7 +33,8 @@ public class AboutTheApp extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        appversion.setText("Version " +pInfo.versionName);
+        if (pInfo == null) appversion.setText("Version 1.1.3" );
+        else appversion.setText("Version " +pInfo.versionName);
     }
 
     @Override
@@ -46,7 +49,7 @@ public class AboutTheApp extends AppCompatActivity {
         }
     }
 
-    public void rateMe(View view)
+    public void rateMe(View v)
     {
         try
         {
@@ -58,6 +61,17 @@ public class AboutTheApp extends AppCompatActivity {
             startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://play.google.com/store/apps/details?id=" +
                             this.getPackageName())));
+        }
+    }
+
+    public void showOtherApps(View v)
+    {
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://developer?id=Korbinian+Moser")));
+        } catch (android.content.ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/developer?id=Korbinian+Moser")));
         }
     }
 }

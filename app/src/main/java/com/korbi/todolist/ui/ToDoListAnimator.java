@@ -2,13 +2,12 @@ package com.korbi.todolist.ui;
 
 import android.support.v7.widget.DefaultItemAnimator;
 
-/**
- * Created by dime on 05/11/14.
- */
+
+//sets the duration of the add and remove animations of the recyclerView
 public class ToDoListAnimator extends DefaultItemAnimator {
     @Override
     public long getRemoveDuration() {
-        return 400;
+        return 350;
     }
 
     @Override
