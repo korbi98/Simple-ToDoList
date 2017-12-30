@@ -16,8 +16,6 @@
     <string name="set_date_btn">Set</string>
     <string name="days_till_deadline" translatable="false">d</string>
     <string name="hours_till_deadline" translatable="false">h</string>
-    <string name="settings">Settings</string>
-    <string name="include_time_in_deadline">Also include a time and not only a date in the deadline</string>
     <string name="event_checkbox">Store in calendar</string>
     <string name="empty_name_error">The name of the task cannot be empty</string>
     <string name="priority_label">Priority:</string>
@@ -26,24 +24,19 @@
     <string name="high">High</string>
     <string name="set_deadline_label">Deadline:</string>
     <string name="reset_deadline_btn">Reset</string>
-    <string name="default_priority_label">Default priority:</string>
     <string name="wrong_time">Time is in the past.\nTime has been set to one hour from now</string>
     <string name="one_task_deleted">Deleted one task!</string>
     <string name="undo_delete">UNDO</string>
-    <string name="set_divider_checkbox">Don\'t show visible dividers in the tasklist</string>
     <string name="add_widget" translatable="false">Add widget</string>
-    <string name="date_or_remaining_time">Show the remaining time instead of the date</string>
     <string name="today">today</string>
     <string name="empty_list">Create new tasks by tapping the + button\nTo delete tasks swipe to the left</string>
     <string name="multiple_tasks_deleted">Deleted %d tasks!</string>
     <string name="new_task_hint">New task</string>
     <string name="undo_pressed">UNDO pressed</string>
-    <string name="deadline_before_priority">Tasks get sorted by deadline first and then by priority</string>
     <string name="tomorow">tomorrow</string>
     <string name="sourcecode">Sourcecode: \ngithub.com/korbi98/ToDoList/</string>
     <string name="speech_to_task_text">What\'s your new task?</string>
     <string name="speech_command_important">important</string>
-
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="add_new_category">Add a new category</string>
@@ -62,13 +55,52 @@
     <string name="delete_last_category_error">You cannot delete the last category!</string>
     <string name="categories">categories</string>
     <string name="show_my_other_apps">My other apps</string>
+    <string name="no_csv_file_error">Please select a valid csv file</string>
+    <string name="new_folder">New folder</string>
 
-    <string-array name="default_priority">
+    <string name="settings_show_dividers">Show dividers</string>
+    <string name="settings">Settings</string>
+    <string name="settings_include_time_in_deadline">Include time in Deadline</string>
+    <string name="settings_general_label">General settings</string>
+    <string name="settings_default_priority_label">Default priority:</string>
+    <string name="settings_deadline_before_priority">Sort tasks by Deadline</string>
+    <string name="settings_date_or_remaining_time">Remaining time instead of date</string>
+    <string name="settings_default_priority_key" translatable="false">settings_default_priority_key</string>
+    <string name="settings_show_dividers_key" translatable="false">settings_show_dividers_key</string>
+    <string name="settings_include_time_in_deadline_key" translatable="false">settings_include_time_in_deadline_key</string>
+    <string name="settings_include_time_in_deadline_summary">Allowes you to set more specific deadlines, including the time at which the task has to be completed</string>
+    <string name="settings_date_or_remaining_time_key" translatable="false">settings_date_or_remaining_time_key</string>
+    <string name="settings_date_or_remaining_time_summary">Shows a countdown of the remaining time instead of the date</string>
+    <string name="settings_deadline_before_priority_key" translatable="false">settings_deadline_before_priority_key</string>
+    <string name="settings_sync_and_backup_category_label" translatable="false">Sync &amp; backup</string>
+    <string name="settings_deadline_before_priority_summary">Order the tasks by deadline first and then by priority</string>
+    <string name="settings_backup_save_key" translatable="false">settings_backup_save_key</string>
+    <string name="settings_backup_save">Export tasks</string>
+    <string name="settings_backup_load">Import tasks</string>
+    <string name="settings_backup_load_key" translatable="false">settings_backup_load_key</string>
+    <string name="import_data_corrupted">Import file is corrupted. Please select a valid one</string>
+    <string name="settings_backup_save_summary">Empty categories won\'t be saved!</string>
+    <string name="settings_backup_delete_key" translatable="false">settings_backup_delete_key</string>
+    <string name="settings_backup_delete">Reset database</string>
+    <string name="settings_backup_delete_message">Delete all tasks and categories!</string>
+    <string name="settings_about_key" translatable="false">settings_about_key</string>
+    <string name="settings_about">About Simple TodoList</string>
+    <string name="export_successful">Export successful</string>
+    <string name="import_successful">Import successful</string>
+    <string name="no_external_storage_permission">No external storage permission</string>
 
+    <string-array name="settings_default_priority_array">
         <item>Low</item>
         <item>Normal</item>
         <item>High</item>
         <item>Last one used</item>
-
     </string-array>
+
+    <string-array name="settings_default_priority_values_array">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
 </resources>

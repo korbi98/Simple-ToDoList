@@ -7,13 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
+import com.korbi.todolist.todolist.R;
 import com.korbi.todolist.ui.AddEditTask;
 import com.korbi.todolist.ui.ChooseWidgetCategory;
 import com.korbi.todolist.ui.MainActivity;
-import com.korbi.todolist.todolist.R;
-import com.korbi.todolist.ui.Settings;
+import com.korbi.todolist.ui.SettingsActivity;
 
 /**
  * Implementation of App Widget functionality.
@@ -26,8 +27,8 @@ public class ToDoListWidget extends AppWidgetProvider
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId)
     {
-        settings = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
-        String title = settings.getString(Settings.WIDGET_CATEGORY+String.valueOf(appWidgetId), "ToDoList");
+        settings = PreferenceManager.getDefaultSharedPreferences(context);
+        String title = settings.getString(SettingsActivity.WIDGET_CATEGORY + String.valueOf(appWidgetId), "ToDoList");
 
         Intent serviceIntent = new Intent(context, WidgetService.class);
         serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -42,8 +43,8 @@ public class ToDoListWidget extends AppWidgetProvider
         Intent addTask = new Intent(context, AddEditTask.class);
         Intent openMainActivity = new Intent(context, MainActivity.class);
         Intent chooseCategory = new Intent(context, ChooseWidgetCategory.class);
-        addTask.putExtra(Settings.CURRENT_CATEGORY, title);
-        openMainActivity.putExtra(Settings.CURRENT_CATEGORY, title);
+        addTask.putExtra(SettingsActivity.CURRENT_CATEGORY, title);
+        openMainActivity.putExtra(SettingsActivity.CURRENT_CATEGORY, title);
         chooseCategory.putExtra(APP_ID, appWidgetId);
 
         PendingIntent pendingAddTaskIntent = PendingIntent.getActivity(context, appWidgetId, addTask, PendingIntent.FLAG_UPDATE_CURRENT);

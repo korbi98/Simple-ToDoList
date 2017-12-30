@@ -3,13 +3,12 @@
     <string name="app_name">ToDoList</string>
 
     <string name="add_task_activity_title">Hinzufügen/Ändern</string>
-    <string name="date_or_remaining_time">Die verbleibende Zeit statt dem Datum anzeigen</string>
     <string name="empty_name_error">Die Bezeichnung der Aufgabe kann nicht leer sein</string>
     <string name="event_checkbox">Im Kalendar speichern</string>
-    <string name="include_time_in_deadline">Auch eine Zeit, statt nur ein Datum festlegen</string>
+    <string name="settings_include_time_in_deadline">Auch eine Zeit festlegen</string>
     <string name="priority_label">Priorität</string>
     <string name="set_deadline_label">Muss erledigt sein bis:</string>
-    <string name="default_priority_label">Standard Priorität:</string>
+    <string name="settings_default_priority_label">Standard Priorität:</string>
 
     <string name="confirm_message">Alle beendeten Aufgaben werden gelöscht!</string>
     <string name="contact_me">Kontakt:\ninfo@korbinian-moser.de</string>
@@ -23,7 +22,7 @@
     <string name="rate_app_button">Bewerte die App</string>
     <string name="reset_deadline_btn">Zurücksetzen</string>
     <string name="set_date_btn">Datum</string>
-    <string name="set_divider_checkbox">Keine Trennlinien zwischen den Aufgaben zeigen</string>
+    <string name="settings_show_dividers">Keine Trennlinien zwischen Aufgaben</string>
     <string name="settings">Einstellungen</string>
     <string name="today">Heute</string>
     <string name="undo_delete">Rückgängig</string>
@@ -33,11 +32,11 @@
     <string name="new_task_hint">Neue Aufgabe</string>
     <string name="app_info">Eine einfache und leistungsstarke App um den Alltag zu meistern.</string>
     <string name="undo_pressed">wird rückgängig gemacht</string>
-    <string name="deadline_before_priority">Aufgaben werden erst nach Datum und dann nach Wichtigkeit sortiert</string>
+    <string name="settings_deadline_before_priority">Nach Datum sortieren</string>
     <string name="tomorow">Morgen</string>
     <string name="sourcecode">Quellcode:\ngithub.com/korbi98/ToDoList/</string>
 
-    <string-array name="default_priority">
+    <string-array name="settings_default_priority">
         <item>Niedrig</item>
         <item>Normal</item>
         <item>Hoch</item>
@@ -60,5 +59,23 @@
     <string name="edit_category_dialog_title">Kategorie bearbeiten</string>
     <string name="delete_last_category_error">Die letzte Kategorie kann nicht gelöscht werden!</string>
     <string name="categories">Kategorien</string>
+    <string name="show_my_other_apps">Meine anderen Apps</string>
+    <string name="no_csv_file_error">Wählen sie eine gültige CSV Datei!</string>
+    <string name="new_folder">Neuer Ordner</string>
+    <string name="settings_general_label">Allgemein</string>
+    <string name="settings_about">Über Simple TodoList</string>
+    <string name="settings_backup_delete_message">Alle Aufgaben und Kategorien löschen!</string>
+    <string name="settings_backup_delete">Datenbank zurücksetzen</string>
+    <string name="settings_backup_save_summary">Leere Kategorien werden nicht gespeichert</string>
+    <string name="import_data_corrupted">Beschädigte oder falsche Importdatei</string>
+    <string name="settings_backup_load">Aufgaben importieren</string>
+    <string name="settings_backup_save">Aufgaben exportieren</string>
+    <string name="settings_deadline_before_priority_summary">Aufgaben zuerst nach Datum und dann nach Wichtigkeit sortieren</string>
+    <string name="settings_date_or_remaining_time_summary">Verbleibende Zeit statt Datum anzeigen</string>
+    <string name="settings_include_time_in_deadline_summary">Zusätzlich zum Datum auch eine Uhrzeit festlegen</string>
+    <string name="settings_date_or_remaining_time">Verbleibende Zeit anzeigen</string>
+    <string name="export_successful">Export erfolgreich</string>
+    <string name="import_successful">Import erfolgreich</string>
+    <string name="no_external_storage_permission">Keine Berechtigung um auf den Speicher zuzugreifen</string>
 
 </resources>

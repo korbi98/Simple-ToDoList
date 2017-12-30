@@ -6,15 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.korbi.todolist.logic.Task;
 import com.korbi.todolist.database.TaskDbHelper;
-import com.korbi.todolist.ui.Settings;
+import com.korbi.todolist.logic.Task;
 import com.korbi.todolist.todolist.R;
+import com.korbi.todolist.ui.SettingsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,10 +26,10 @@ import java.util.List;
 public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
 {
     private static TaskDbHelper db;
+    SharedPreferences settings;
     private List<Task> tasks;
     private Context context;
     private Bundle bundle;
-    SharedPreferences settings;
     private int widgetID;
 
 
@@ -39,7 +40,7 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
     public TaskWidgetProvider(Context context, Intent intent)
     {
         this.context = context;
-        settings = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        settings = PreferenceManager.getDefaultSharedPreferences(context);
         bundle = intent.getExtras();
 
     }
@@ -50,7 +51,7 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
     {
         widgetID = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
         db = new TaskDbHelper(context);
-        tasks = db.getUncompletedTasksByCategory(settings.getString(Settings.WIDGET_CATEGORY + String.valueOf(widgetID), db.getTaskCategory(1)));
+        tasks = db.getUncompletedTasksByCategory(settings.getString(SettingsActivity.WIDGET_CATEGORY + String.valueOf(widgetID), db.getTaskCategory(1)));
     }
 
     @Override
@@ -119,7 +120,7 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onDataSetChanged()
     {
-        tasks = db.getUncompletedTasksByCategory(settings.getString(Settings.WIDGET_CATEGORY + String.valueOf(widgetID), db.getTaskCategory(1)));
+        tasks = db.getUncompletedTasksByCategory(settings.getString(SettingsActivity.WIDGET_CATEGORY + String.valueOf(widgetID), db.getTaskCategory(1)));
         sort();
     }
 
@@ -137,7 +138,7 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
                     return sortState;
                 }
 
-                if (settings.getBoolean(Settings.DEADLINE_FIRST, false))
+                if (settings.getBoolean(context.getString(R.string.settings_deadline_before_priority_key), false))
                 {
                     if (t1.getDeadline().compareTo(t2.getDeadline()) != 0)
                     {
@@ -177,8 +178,8 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
 
         boolean timeIsSet = task.getTimeIsSet() == Task.DATE_AND_TIME;
         boolean deadlineIsSet = task.getTimeIsSet() != Task.NO_DEADLINE;
-        boolean includeTime = settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false) && timeIsSet;
-        boolean showRemainingTime = settings.getBoolean(Settings.REMAINING_TIME_INSTEAD_OF_DATE, false);
+        boolean includeTime = settings.getBoolean(context.getString(R.string.settings_include_time_in_deadline_key), false) && timeIsSet;
+        boolean showRemainingTime = settings.getBoolean(context.getString(R.string.settings_date_or_remaining_time_key), false);
         String deadlineHour = showTime.format(task.getDeadline());
         String deadlineDate = showFullDate.format(task.getDeadline());
         int remainingDays = (taskCal.get(Calendar.YEAR) - currentCal.get(Calendar.YEAR)) * 365 +

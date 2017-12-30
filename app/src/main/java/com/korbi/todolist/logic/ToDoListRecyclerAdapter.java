@@ -15,10 +15,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.korbi.todolist.todolist.R;
 import com.korbi.todolist.ui.AddEditTask;
 import com.korbi.todolist.ui.MainActivity;
-import com.korbi.todolist.ui.Settings;
-import com.korbi.todolist.todolist.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -44,44 +43,11 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
     private SimpleDateFormat showTime = new SimpleDateFormat(("HH:mm"));
 
 
-    public class TaskViewHolder extends RecyclerView.ViewHolder
-    {
-        TextView task_name, task_deadline;
-        CheckBox isDone;
-        View divider;
-        View priorityIndicator;
-
-        private TaskViewHolder(View view)
-        {
-            super(view);
-            task_name = itemView.findViewById(R.id.list_task_view);
-            task_deadline = itemView.findViewById(R.id.list_deadline);
-            isDone = itemView.findViewById(R.id.list_checkbox);
-            divider = itemView.findViewById(R.id.listDivider);
-            priorityIndicator = itemView.findViewById(R.id.priorityIndicator);
-
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-
-                    Intent i = new Intent(context, AddEditTask.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.putExtra("position", getAdapterPosition());
-                    i.putExtra("prefillBool", true);
-                    context.startActivity(i);
-
-                    return false;
-                }
-            });
-        }
-    }
-
     public ToDoListRecyclerAdapter(List tasks, Context context)
     {
         this.tasks = tasks;
         this.context = context;
     }
-
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -154,8 +120,8 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
 
         boolean timeIsSet = task.getTimeIsSet() == Task.DATE_AND_TIME;
         boolean deadlineIsSet = task.getTimeIsSet() != Task.NO_DEADLINE;
-        boolean includeTime = settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false) && timeIsSet;
-        boolean showRemainingTime = settings.getBoolean(Settings.REMAINING_TIME_INSTEAD_OF_DATE, false);
+        boolean includeTime = settings.getBoolean(context.getString(R.string.settings_include_time_in_deadline_key), false) && timeIsSet;
+        boolean showRemainingTime = settings.getBoolean(context.getString(R.string.settings_date_or_remaining_time_key), false);
         String deadlineHour = showTime.format(task.getDeadline());
         String deadlineDate = showFullDate.format(task.getDeadline());
         int remainingDays = (taskCal.get(Calendar.YEAR) - currentCal.get(Calendar.YEAR)) * 365 +
@@ -219,7 +185,7 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
                     return sortState;
                 }
 
-                if (settings.getBoolean(Settings.DEADLINE_FIRST, false)) // deadline first and then priority
+                if (settings.getBoolean(context.getString(R.string.settings_deadline_before_priority_key), false)) // deadline first and then priority
                 {
                     if (t1.getDeadline().compareTo(t2.getDeadline()) != 0)
                     {
@@ -297,11 +263,41 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
 
     private void setDividers(ToDoListRecyclerAdapter.TaskViewHolder holder)
     {
-        if(!MainActivity.settings.getBoolean(Settings.NO_DIVIDERS, false))
+        if (MainActivity.settings.getBoolean(context.getString(R.string.settings_show_dividers_key), true))
         {
             holder.divider.setVisibility(View.VISIBLE);
         }
         else holder.divider.setVisibility(View.GONE);
+    }
+
+    public class TaskViewHolder extends RecyclerView.ViewHolder {
+        TextView task_name, task_deadline;
+        CheckBox isDone;
+        View divider;
+        View priorityIndicator;
+
+        private TaskViewHolder(View view) {
+            super(view);
+            task_name = itemView.findViewById(R.id.list_task_view);
+            task_deadline = itemView.findViewById(R.id.list_deadline);
+            isDone = itemView.findViewById(R.id.list_checkbox);
+            divider = itemView.findViewById(R.id.listDivider);
+            priorityIndicator = itemView.findViewById(R.id.priorityIndicator);
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    Intent i = new Intent(context, AddEditTask.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.putExtra("position", getAdapterPosition());
+                    i.putExtra("prefillBool", true);
+                    context.startActivity(i);
+
+                    return false;
+                }
+            });
+        }
     }
 }
 

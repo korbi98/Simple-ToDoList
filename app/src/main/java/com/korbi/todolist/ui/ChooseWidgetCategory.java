@@ -2,11 +2,11 @@ package com.korbi.todolist.ui;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,14 +37,14 @@ public class ChooseWidgetCategory extends AppCompatActivity {
         this.setFinishOnTouchOutside(true);
         setResult(RESULT_CANCELED);
 
-        settings = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Bundle bundle = getIntent().getExtras();
 
         widgetToChange = bundle.getInt(ToDoListWidget.APP_ID);
         if (widgetToChange == 0) { //first setup
             widgetToChange = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
         }
-        getWidgetIdKey = Settings.WIDGET_CATEGORY + String.valueOf(widgetToChange);
+        getWidgetIdKey = SettingsActivity.WIDGET_CATEGORY + String.valueOf(widgetToChange);
 
         ListView lv = findViewById(R.id.choose_widget_category_list);
 

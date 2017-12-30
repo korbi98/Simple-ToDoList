@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/settings_general_label">
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/settings_default_priority_array"
+            android:entryValues="@array/settings_default_priority_values_array"
+            android:key="@string/settings_default_priority_key"
+            android:negativeButtonText="cancel"
+            android:positiveButtonText="@null"
+            android:title="@string/settings_default_priority_label" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/settings_show_dividers_key"
+            android:title="@string/settings_show_dividers" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/settings_include_time_in_deadline_key"
+            android:summary="@string/settings_include_time_in_deadline_summary"
+            android:title="@string/settings_include_time_in_deadline" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/settings_date_or_remaining_time_key"
+            android:summary="@string/settings_date_or_remaining_time_summary"
+            android:title="@string/settings_date_or_remaining_time" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/settings_deadline_before_priority_key"
+            android:summary="@string/settings_deadline_before_priority_summary"
+            android:title="@string/settings_deadline_before_priority" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_sync_and_backup_category_label">
+
+        <Preference
+            android:key="@string/settings_backup_save_key"
+            android:summary="@string/settings_backup_save_summary"
+            android:title="@string/settings_backup_save" />
+
+        <Preference
+            android:key="@string/settings_backup_load_key"
+            android:title="@string/settings_backup_load" />
+
+        <Preference
+            android:key="@string/settings_backup_delete_key"
+            android:title="@string/settings_backup_delete" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/about">
+
+        <Preference
+            android:key="@string/settings_about_key"
+            android:title="@string/settings_about" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
+
+
+
+
+

@@ -5,14 +5,14 @@ import android.app.TimePickerDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,35 +27,31 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.korbi.todolist.database.TaskDbHelper;
+import com.korbi.todolist.logic.Task;
+import com.korbi.todolist.todolist.R;
+import com.korbi.todolist.widget.ToDoListWidget;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import com.korbi.todolist.database.TaskDbHelper;
-import com.korbi.todolist.logic.Task;
-import com.korbi.todolist.widget.ToDoListWidget;
-import com.korbi.todolist.todolist.R;
-
 public class AddEditTask extends AppCompatActivity
 {
+    final int REQUEST_CODE = 1;
+    SimpleDateFormat dateFormat;
+    SimpleDateFormat dateTimeFormat;
+    Calendar c = Calendar.getInstance();
+    SharedPreferences settings;
+    SharedPreferences.Editor editor;
     private EditText newTaskEntry;
     private CheckBox createEventCheckBox;
     private SeekBar selectPriority;
     private TextView deadlineLabel;
     private Button resetDeadlineButton;
-
-    SimpleDateFormat dateFormat;
-    SimpleDateFormat dateTimeFormat;
-
-    Calendar c = Calendar.getInstance();
-
-    SharedPreferences settings;
-    SharedPreferences.Editor editor;
-
     private int position;
     private int isDateOrTimeSet = Task.NO_DEADLINE;
-    final int REQUEST_CODE = 1;
     private String currentCategory;
 
     private TaskDbHelper db;
@@ -92,17 +88,16 @@ public class AddEditTask extends AppCompatActivity
         resetDeadlineButton.setEnabled(false);
 
         db = new TaskDbHelper(this);
-        currentCategory = bundle.getString(Settings.CURRENT_CATEGORY, db.getTaskCategory(1));
-        if (currentCategory == null) currentCategory = db.getTaskCategory(1);
-
-        settings = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        currentCategory = bundle.getString(SettingsActivity.CURRENT_CATEGORY, db.getFirstCategory());
+        if (currentCategory == null) currentCategory = db.getFirstCategory();
+        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = settings.edit();
 
-        if(settings.getInt(Settings.STANDARD_PRIORITY_SETTING, 1) == 3)
+        if (Integer.valueOf(settings.getString(getString(R.string.settings_default_priority_key), "1")) == 3)
         {
-            selectPriority.setProgress(settings.getInt(Settings.PREVIOUS_PRIORITY, 1));
-        }
-        else selectPriority.setProgress(settings.getInt(Settings.STANDARD_PRIORITY_SETTING, 1));
+            selectPriority.setProgress(settings.getInt(SettingsActivity.PREVIOUS_PRIORITY, 1));
+        } else
+            selectPriority.setProgress(Integer.valueOf(settings.getString(getString(R.string.settings_default_priority_key), "1")));
 
         createCustomActionBar(getString(R.string.add_task_activity_title));
 
@@ -140,7 +135,7 @@ public class AddEditTask extends AppCompatActivity
 
     public void save(View v)
     {
-        editor.putInt(Settings.PREVIOUS_PRIORITY, selectPriority.getProgress());
+        editor.putInt(SettingsActivity.PREVIOUS_PRIORITY, selectPriority.getProgress());
         editor.commit();
 
         if(getIntent().getBooleanExtra("prefillBool", false))
@@ -275,7 +270,8 @@ public class AddEditTask extends AppCompatActivity
 
     public void setDeadline(View v)
     {
-        if (settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false)) setTime(v);
+        if (settings.getBoolean(getString(R.string.settings_include_time_in_deadline_key), false))
+            setTime(v);
         setDate(v);
     }
 
@@ -318,7 +314,7 @@ public class AddEditTask extends AppCompatActivity
 
     private void updateDeadlineSection() // toggles whether the reset button is enabled or not
     {
-        if (isDateOrTimeSet == Task.DATE_AND_TIME && settings.getBoolean(Settings.INCLUDE_TIME_SETTING, false))
+        if (isDateOrTimeSet == Task.DATE_AND_TIME && settings.getBoolean(getString(R.string.settings_include_time_in_deadline_key), false))
         {
             createEventCheckBox.setEnabled(true);
             resetDeadlineButton.setEnabled(true);
@@ -372,7 +368,7 @@ public class AddEditTask extends AppCompatActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent)
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) //Result of Speech recognition
     {
         String resultSpeech;
         super.onActivityResult(requestCode, resultCode, intent);
