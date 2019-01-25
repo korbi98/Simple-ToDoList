@@ -22,7 +22,7 @@
     <string name="rate_app_button">Bewerte die App</string>
     <string name="reset_deadline_btn">Zurücksetzen</string>
     <string name="set_date_btn">Datum</string>
-    <string name="settings_show_dividers">Keine Trennlinien zwischen Aufgaben</string>
+    <string name="settings_show_dividers">Trennlinien zwischen Aufgaben</string>
     <string name="settings">Einstellungen</string>
     <string name="today">Heute</string>
     <string name="undo_delete">Rückgängig</string>
@@ -36,12 +36,13 @@
     <string name="tomorow">Morgen</string>
     <string name="sourcecode">Quellcode:\ngithub.com/korbi98/ToDoList/</string>
 
-    <string-array name="settings_default_priority">
+    <string-array name="settings_default_priority_array">
         <item>Niedrig</item>
         <item>Normal</item>
         <item>Hoch</item>
         <item>Zuletzt verwendete</item>
     </string-array>
+
     <string name="speech_to_task_text">Was musst du erledigen?</string>
     <string name="speech_command_important">wichtig</string>
     <string name="nothing_to_delete">Es gibt nichts zu löschen</string>

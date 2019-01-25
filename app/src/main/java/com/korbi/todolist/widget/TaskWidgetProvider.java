@@ -51,7 +51,7 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
     {
         widgetID = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
         db = new TaskDbHelper(context);
-        tasks = db.getUncompletedTasksByCategory(settings.getString(SettingsActivity.WIDGET_CATEGORY + String.valueOf(widgetID), db.getTaskCategory(1)));
+        tasks = db.getUncompletedTasksByCategory(settings.getString(SettingsActivity.WIDGET_CATEGORY + String.valueOf(widgetID), db.getFirstCategory()));
     }
 
     @Override
@@ -120,7 +120,7 @@ public class TaskWidgetProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onDataSetChanged()
     {
-        tasks = db.getUncompletedTasksByCategory(settings.getString(SettingsActivity.WIDGET_CATEGORY + String.valueOf(widgetID), db.getTaskCategory(1)));
+        tasks = db.getUncompletedTasksByCategory(settings.getString(SettingsActivity.WIDGET_CATEGORY + String.valueOf(widgetID), db.getFirstCategory()));
         sort();
     }
 

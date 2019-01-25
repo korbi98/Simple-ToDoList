@@ -97,8 +97,6 @@ public class ToDoListRecyclerAdapter extends RecyclerView.Adapter<ToDoListRecycl
             }
         });
 
-
-
         setDeadlineRemainingTime(h, taskYear);
         setItemColor(h);
         setDividers(h);

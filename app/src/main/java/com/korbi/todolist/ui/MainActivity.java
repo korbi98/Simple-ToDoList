@@ -24,6 +24,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private Toolbar toolbar;
+
     private String currentCategory;
 
     @Override
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setUpItemSwipe();
         setUpSnackbar();
+        updateView();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         updateWidget();
+
     }
 
     @Override
